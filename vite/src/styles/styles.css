@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Corben&family=Dosis:wght@600&family=Montserrat&family=Open+Sans:wght@500&family=Poppins&family=Roboto&display=swap');
+
+*, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+:root {
+    --bkColor: rgb(54,168,212);
+    --bkLight: rgb(153, 197, 214);
+    --formBk: rgb(24, 74, 94);
+    --formTxt: rgb(200,200,200);
+    --formBorderDark: rgb(6, 20, 26);
+    --formBorderLight: rgb(159, 206, 226);
+    --cardBk: rgb(153, 148, 179);
+    --textLight: rgb(255, 255, 255);
+}
+body {
+    background-color: var(--bkColor);
+    font-family: 'Poppins', sans-serif;
+}
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+.mainPage {
+    background-color: var(--bkLight);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+}
+.menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+input, select, textarea {
+    font-size: 1.1rem;
+    padding: 4px;
+    border-radius: 5px;
+    border: 2px solid var(--formBorderLight);
+}
+.shoeModelForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--formBk);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    margin: 15px 0;
+    color: var(--formTxt);
+    gap: 10px;
+}
+/* ---- Product card ---- */
+.models {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 32px 8px;
+    border-radius: 10px;
+    gap: 16px;
+    max-width: 1200px;    
+}
+.productCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 250px;
+    border-radius: 10px;
+    background-color: var(--cardBk);
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in;
+    will-change: transform;
+}
+.productCard:hover {
+    transform: scale(1.05);
+}
+.imageWrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
+    display:flex;
+}
+.imageWrapper img {
+    width: 100%;
+    height: 100%;
+}
+.cardTitle {
+    font-size: 1.2rem;
+}
+
+.cardBrand {
+    color: var(--textLight);
+}
+
+/* ---- Product instance ---- */
+.productInstance {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
