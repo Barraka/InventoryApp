@@ -15,7 +15,6 @@ exports.index = async (req, res, next) => {
         const cursor = client.db('inventory').collection('shoe_instance').find();
         cursor.sort();
         const results = await cursor.toArray();
-        console.log('data: ', results);
         await client.close();
     } catch(e) { 
         console.log('e: ', e);
@@ -29,7 +28,6 @@ exports.getModels = async (req, res, next) => {
         const cursor = client.db('inventory').collection('shoe_instance').find();
         cursor.sort();
         const results = await cursor.toArray();
-        console.log('data: ', results);
         await client.close();
     } catch(e) { 
         console.log('e: ', e);

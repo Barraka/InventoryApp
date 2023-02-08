@@ -22,7 +22,63 @@ exports.getModels = async (req, res, next) => {
             brands:brandCursor,
         });
     } catch(e) { 
-        console.log('e: ', e);
+        console.error('e: ', e);
+    }
+    return;
+}
+
+exports.updateModels = async (req, res, next) => {
+    try {
+        const id=req.originalUrl.split('/')[2]
+        const tempval={...req.body};
+        delete tempval._id;
+        await client.connect();
+        const result = await client.db('inventory').collection('shoe_model').replaceOne({_id:new ObjectId(id)}, tempval);
+        res.status(200).send({
+            message: result,   
+        });
+    } catch(e) { 
+        console.error('e: ', e);
+    }
+    return;
+}
+
+exports.deleteModel = async (req, res, next) => {
+    try {
+        const id=req.originalUrl.split('/')[2]
+        const tempval={...req.body};
+        await client.connect();
+        const result = await client.db('inventory').collection('shoe_model').deleteOne({_id:new ObjectId(id)});
+        const cursorFind = client.db('inventory').collection('shoe_model').find();
+        cursorFind.sort({"model":1});
+        const results = await cursorFind.toArray();
+        if(results.length)res.status(200).send({message: results});
+        // res.status(200).send({
+        //     message: result,   
+        // });
+    } catch(e) { 
+        console.error('e: ', e);
+    }
+    return;
+}
+
+exports.cleanData = async (req, res, next) => {
+    try {
+        const transfer = req.body;
+        await client.connect();
+        const result = transfer.forEach(async x => {
+            const tempval = {};
+            tempval.model=x.model;
+            tempval.brand=x.brand;
+            tempval.sizes=x.sizes;
+            const result2 = await client.db('inventory').collection('shoe_model').replaceOne({_id:new ObjectId(x._id)}, tempval);
+        });
+
+        res.status(200).send({
+            message: result,   
+        });
+    } catch(e) { 
+        console.error('e: ', e);
     }
     return;
 }
@@ -33,14 +89,35 @@ exports.getModelByBrand = async (brand,req,res,next) => {
         const cursor = client.db('inventory').collection('shoe_model').find({brand: brand});
         cursor.sort();
         const results = await cursor.toArray();
-        // console.log('data: ', results);
         await client.close();
         res.status(200).send({
             message: results,   
         });
         
     } catch(e) { 
-        console.log('e: ', e);
+        console.error('e: ', e);
+        res.status(500).send({
+            message: e
+        });
+    }
+    
+    return;
+}
+
+exports.getInstances = async (req,res,next) => {
+    try {
+        const id=req.originalUrl.split('/')[2]
+        await client.connect();
+        const cursor = client.db('inventory').collection('shoe_instance').find({model: id});
+        cursor.sort();
+        const results = await cursor.toArray();
+        await client.close();
+        res.status(200).send({
+            message: results,   
+        });
+        
+    } catch(e) { 
+        console.error('e: ', e);
         res.status(500).send({
             message: e
         });
@@ -81,7 +158,7 @@ exports.getModelByName = async (name,req,res,next) => {
             message: results,   
         });
     } catch(e) { 
-        console.log('e: ', e);
+        console.error('e: ', e);
         res.status(500).send({
             message: e
         });
@@ -92,11 +169,10 @@ exports.getModelByName = async (name,req,res,next) => {
 exports.addShoeModel = [
     body('brand').exists().trim().escape(),
     body('model', 'Model name must be at least 3 characters').exists().isString().trim().isLength({ min: 3 }).escape(),
-    body('description').isString().trim().escape(),
     async (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
-            console.log('errors found, ', errors);
+            console.error('errors found, ', errors);
             res.status(500).send({
                 message: errors,   
             });
@@ -106,18 +182,18 @@ exports.addShoeModel = [
         try {
             await client.connect();
             const cursor = await client.db('inventory').collection('brands').findOne({_id: new ObjectId(req.body.brand)}); //req.body.brand
-            console.log('data: ', cursor);
             if(!cursor) {
                 res.status(500).send({message:"Brand id not found"});
                 return;
             }
             //Brand id has been found, proceed to add
-            console.log('req: ', req.body);
             const cursorAdd = await client.db('inventory').collection('shoe_model').insertOne(req.body); //req.body.brand
-            res.status(200).send(cursorAdd);
-            await client.close();
+            const cursorFind = client.db('inventory').collection('shoe_model').find();
+            cursorFind.sort({"model":1});
+            const results = await cursorFind.toArray();
+            if(results.length)res.status(200).send({message: results});
         } catch(e) { 
-            console.log('e: ', e);
+            console.error('error adding shoe model: ', e);
         }
         return;
       },
