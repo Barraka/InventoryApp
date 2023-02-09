@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-function ShoeInstanceSize(props) {
+function ShirtInstanceSize(props) {
+
 
     return (
         <div key={props.x} className="instanceWrapper" data-size={props.x} data-quantity={props.quantity} onClick={e=>props.displayEdit(e)}>
@@ -9,4 +10,4 @@ function ShoeInstanceSize(props) {
     )
 }
 
-export default ShoeInstanceSize
+export default ShirtInstanceSize

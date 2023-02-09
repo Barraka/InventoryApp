@@ -23,7 +23,7 @@ function EditProductHeader(props) {
             update(reader.result);
         };
         reader.onerror = function (error) {
-          console.log('Error: ', error);
+          console.error('Error: ', error);
         };
      }
 
@@ -34,42 +34,40 @@ function EditProductHeader(props) {
     function imageZoom() {
         setZoomedImage(<ZoomedImage src={data.picture} setZoomedImage={setZoomedImage}/>);
     }   
-    async function deleteProduct() {
-        const targetPath = 'http://localhost:3000/shoe_models/'+props.data._id;
-        const outcome=await axios.delete(targetPath, data._id);
-        // console.log('outcome: ', outcome.data.message);
-        const newData=outcome.data.message;
-        props.setMainPage(<ShoeModel setMainPage={props.setMainPage}/>);
-    }
+    
 
     return (
         
         <div className='editProductHeader'>
             <div className="backdrop"></div>
             <div className='editProductHeaderWrapper'>
-                {zoomedImage}
-                <div className="productNameLabel">Product Name:</div>
-                <input type="text" value={data.model || ''} onChange={e=>setData({...data, model:e.target.value})}/>
+                
+                <div className="editProductInner">
+                    {zoomedImage}
+                    <div className="productNameLabel">Product Name:</div>
+                    <input type="text" value={data.model || ''} onChange={e=>setData({...data, model:e.target.value})}/>
 
-                <div className="productBrand">Brand:</div>
-                <select name="brand" id="brand" onChange={dropdownChange} value={data.brandName || ''}>
-                    {brands.map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)}
-                </select>
+                    <div className="productBrand">Brand:</div>
+                    <select name="brand" id="brand" onChange={dropdownChange} value={data.brandName || ''}>
+                        {brands.map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)}
+                    </select>
 
-                <div className="productPicture">Producut Image:</div>
-                <input type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
+                    <div className="productPicture">Producut Image:</div>
+                    <input type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
 
-                <div className="productPrice">Price:</div>
-                <input type="text" value={data.price || ''} onChange={e=>setData({...data, price:parseFloat(e.target.value)})}/>
+                    <div className="productPrice">Price:</div>
+                    <input type="text" value={data.price || ''} onChange={e=>setData({...data, price:parseFloat(e.target.value)})}/>
 
-                <div className="headerImageWrapper" onClick={imageZoom}>
-                    <img src={data.picture} alt="" />
+                    <div className="headerImageWrapper" onClick={imageZoom}>
+                        <img src={data.picture} alt="" />
+                    </div>
+                    <div className="buttonsWrapper">
+                        <button className='editButton' onClick={()=>props.updateInfo(data)}>Confirm</button>
+                        <button className='editButton' onClick={()=>props.setOutput('')}>Cancel</button>
+                    </div>
+                    <button className='deleteButton' onClick={props.deleteProduct}>Delete Product</button>
                 </div>
-                <div className="buttonsWrapper">
-                    <button className='editButton' onClick={()=>props.updateInfo(data)}>Confirm</button>
-                    <button className='editButton' onClick={()=>props.setOutput('')}>Cancel</button>
-                </div>
-                <button className='deleteButton' onClick={deleteProduct}>Delete Product</button>
+                
             </div>
             
         </div>

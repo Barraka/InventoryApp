@@ -4,6 +4,7 @@ import EditModel from './EditModel';
 import ShoeInstanceSize from './ShoeInstanceSize';
 import EditProductHeader from './EditProductHeader';
 import AddSizeShoe from './AddSizeShoe';
+import ShoeModel from './ShoeModel';
 
 function ShoeInstance(props) {
     const [output, setOutput] = useState();
@@ -12,17 +13,16 @@ function ShoeInstance(props) {
     const [addSize, setAddSize] = useState();
 
     useEffect(()=>{
-        setModelInfo(props.data);
-        
+        setModelInfo(props.data);        
     },[]);
+
     useEffect(()=>{        
         if(Object.keys(modelInfo).length) {            
             if(Object.keys(modelInfo.sizes).length) {
                 setDisplaySizes(Object.keys(modelInfo.sizes).sort().map(x=> <ShoeInstanceSize key={x} x={x} quantity={modelInfo.sizes[x]} displayEdit={displayEdit}/>));
             }
             else setDisplaySizes(<div>There are currently no sizes in stock</div>);
-        }
-        
+        }        
     },[modelInfo]);
    
 
@@ -36,14 +36,14 @@ function ShoeInstance(props) {
     async function updateInfo(o) {
         setOutput('');
         setAddSize('');
-        const targetPath = 'http://localhost:3000/shoe_models/'+props.data._id;
-        const outcome=await axios.put(targetPath, o);
-        setModelInfo({...o});
-        const tempval=[...props.models];
+        const tempval=[...props.models];        
         for(let i=0;i<tempval.length;i++) {
-            if(tempval[i]._id===o._id) {tempval[i]={...o};console.log('found ', tempval[i]);}
+            if(tempval[i]._id===o._id)tempval[i]={...o};
         }
+        setModelInfo({...o});
         props.setModals(tempval);
+        const targetPath = 'http://localhost:3000/shoe_models/'+props.data._id;
+        const outcome=await axios.put(targetPath, o);  
     }
 
     function displayEdit(e) {
@@ -53,8 +53,21 @@ function ShoeInstance(props) {
     }
 
     function displayHeader() {
-        setOutput(<EditProductHeader setMainPage={props.setMainPage}  setModals={props.setModals} brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
+        setOutput(<EditProductHeader deleteProduct={deleteProduct} setMainPage={props.setMainPage}  setModals={props.setModals} brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
     }   
+
+    async function deleteProduct() {
+        props.refresh();
+        props.setModels(prev=>prev.filter(x=>x._id!==modelInfo._id));
+        const targetPath = 'http://localhost:3000/shoe_models/'+modelInfo._id;
+        const outcome=await axios.delete(targetPath, modelInfo._id);
+        const newData=outcome.data.message;
+        console.log('new data after deletion: ', newData);
+        
+        // props.setModels(newData);
+        
+        // props.setMainPage(<ShoeModel setMainPage={props.setMainPage}/>);
+    }
 
     function newQuantity() {
         const tempval={...modelInfo};
@@ -64,12 +77,11 @@ function ShoeInstance(props) {
         setModelInfo({...tempval});
     }
 
-
-    const editIcon=<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M5 19h1.4l8.625-8.625-1.4-1.4L5 17.6ZM19.3 8.925l-4.25-4.2 1.4-1.4q.575-.575 1.413-.575.837 0 1.412.575l1.4 1.4q.575.575.6 1.388.025.812-.55 1.387ZM17.85 10.4 7.25 21H3v-4.25l10.6-10.6Zm-3.525-.725-.7-.7 1.4 1.4Z"/></svg>;
+    const addIcon=<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17h2v-4h4v-2h-4V7h-2v4H7v2h4Zm1 5q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4 8.65 4 6.325 6.325 4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/></svg>;
 
     return (
         <div className='productInstance shoeInstance'>
-            <button onClick={props.refresh}>Back to catalogue</button>
+            <button className='backButton' onClick={props.refresh}><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="m9 18-6-6 6-6 1.4 1.4L6.8 11H21v2H6.8l3.6 3.6Z"/></svg><span>Back to catalogue</span></button>
             {/* <button onClick={newQuantity}>new quantity</button> */}
             <div className="modelHeader" onClick={displayHeader}>
                 <div className="model">{modelInfo.model}</div>
@@ -78,7 +90,7 @@ function ShoeInstance(props) {
                     <img src={modelInfo.picture} alt="picture" />
                 </div>
             </div>
-            <button onClick={()=>setAddSize(<AddSizeShoe setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>Add new size</button>
+            <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShoe setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>
             {output}
             {displaySizes}
             {addSize}            

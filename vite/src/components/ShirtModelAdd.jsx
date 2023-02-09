@@ -2,23 +2,17 @@ import React, { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import axios from 'axios';
 
-
-function ShoeModelAdd(props) {
+function ShirtModelAdd(props) {
     const [data, setData] = useState({model: '', brand: '', price: '', picture:'', sizes:{}});
     const [brands, setBrands] = useState([]);
     const [file, setFile] = useState(null);
+    const modelRef = useRef(null);
+    const priceRef = useRef(null);
+    const brandRef = useRef(null);
 
     useEffect(()=>{
         setBrands(props.brands);        
     },[]);
-
-    // useEffect(()=>{
-
-    // },[file]);
-
-    const modelRef = useRef(null);
-    const priceRef = useRef(null);
-    const brandRef = useRef(null);
 
     function getBase64(file) {
         function update(info) {            
@@ -32,15 +26,16 @@ function ShoeModelAdd(props) {
         reader.onerror = function (error) {
           console.error('Error: ', error);
         };
-     }
-
+    }
+    
     function dropdownChange(e) {
         const idChosen = e.target.children[e.target.selectedIndex].getAttribute('data-id');
         const brandChosen = e.target.children[e.target.selectedIndex].value;
         setData({...data, brand:idChosen, brandName: brandChosen});
     }
-
+    
     function isNumeric(str) {
+        console.log('in isnumeric: ', typeof str);
         if (typeof str != "string") return false // we only process strings!  
         return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
                !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
@@ -57,6 +52,7 @@ function ShoeModelAdd(props) {
         //Check price
         if(data.price==='')priceErrors.push('Please fill out this field.');
         else if(!isNumeric(data.price)) {
+            console.log('price: ', typeof(data.price)); 
             priceErrors.push('Not a valid price.');
         }        
 
@@ -69,7 +65,7 @@ function ShoeModelAdd(props) {
             priceRef.current.reportValidity();
         }   
         else {
-            //set default brand id
+            //set default brand id            
             let tempdata={...data};
             if(tempdata.brand==='') {
                 const idChosen = brandRef.current.children[brandRef.current.selectedIndex].getAttribute('data-id');
@@ -80,20 +76,21 @@ function ShoeModelAdd(props) {
     }
 
     async function sendData(o) {
-        const prevData=props.models;
-        axios.post('http://localhost:3000/add_shoe_model', o)
-        .then(res=>{
-            props.setModels(res.data.message);
-        })     
+        let outcome;
+        console.log('about to send: ', o);
+        axios.post('http://localhost:3000/add_shirt_model', o)
+        .then(res=>  {
+            outcome=res;
+            console.log('outcome shirt send data: ', outcome.message);
+            setFile(res);
+        })
         .catch(e=>{
             console.error('error: ', e);
-            props.setModels(prevData);
             const errorArray=e.response?.data?.message?.errors;
-        });
-        props.setModels(prev=>[...prev, o]); 
-        props.refresh();               
+        })
+        props.refresh();        
     }
-    
+
     return (
         <div className="addProduct">
             <div className="backdrop"></div>
@@ -117,7 +114,7 @@ function ShoeModelAdd(props) {
 
                     {/* price */}
                     <label htmlFor="price">Price:</label>
-                    <input ref={priceRef} name="price" id="price" placeholder='Price' onChange={e=>setData({...data, price: e.target.value})} required ></input>
+                    <input ref={priceRef} name="price" id="price" placeholder='Price' onChange={e=>setData({...data, price: (e.target.value)})} required ></input>
 
                     <div className="buttonsWrapper">
                         <button className='editButton' onClick={validate}>Submit</button>
@@ -125,8 +122,8 @@ function ShoeModelAdd(props) {
                     </div>
                 </form>                
             </div>
-        </div>        
+        </div>
     )
 }
 
-export default ShoeModelAdd
+export default ShirtModelAdd

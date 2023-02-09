@@ -16,7 +16,7 @@ exports.getModels = async (req, res, next) => {
         results.forEach(x=>idList.push(new ObjectId(x._id)));
         let brandCursor= await client.db('inventory').collection('brands').find();
         brandCursor = await brandCursor.toArray();
-        await client.close();
+        // await client.close();
         res.status(200).send({
             message: results,   
             brands:brandCursor,
@@ -53,9 +53,6 @@ exports.deleteModel = async (req, res, next) => {
         cursorFind.sort({"model":1});
         const results = await cursorFind.toArray();
         if(results.length)res.status(200).send({message: results});
-        // res.status(200).send({
-        //     message: result,   
-        // });
     } catch(e) { 
         console.error('e: ', e);
     }
@@ -89,7 +86,7 @@ exports.getModelByBrand = async (brand,req,res,next) => {
         const cursor = client.db('inventory').collection('shoe_model').find({brand: brand});
         cursor.sort();
         const results = await cursor.toArray();
-        await client.close();
+        // await client.close();
         res.status(200).send({
             message: results,   
         });
@@ -111,7 +108,7 @@ exports.getInstances = async (req,res,next) => {
         const cursor = client.db('inventory').collection('shoe_instance').find({model: id});
         cursor.sort();
         const results = await cursor.toArray();
-        await client.close();
+        // await client.close();
         res.status(200).send({
             message: results,   
         });
@@ -153,7 +150,7 @@ exports.getModelByName = async (name,req,res,next) => {
         const results = await cursor.toArray();
         const brandName = await client.db('inventory').collection('brands').findOne({_id: new ObjectId(results[0].brand)});
         results[0].brandName=brandName.name;
-        await client.close();
+        // await client.close();
         res.status(200).send({
             message: results,   
         });
@@ -197,56 +194,4 @@ exports.addShoeModel = [
         }
         return;
       },
-    
-    // console.log('in add shoe controller');
-    //Crud operation
-    // try {
-    //     await client.connect();
-    //     const cursor = client.db('inventory').collection('shoe_model').find({model: name});
-    //     cursor.sort();
-    //     const results = await cursor.toArray();
-    //     console.log('data: ', results);
-    //     await client.close();
-    // } catch(e) { 
-    //     console.log('e: ', e);
-    // }
-    // return;
-]
-
-// exports.addShoe = [
-//     body("model","Model name must not be empty")
-//         .trim()
-//         .isLength({ min: 1 })
-//         .escape(),
-//     body("size","Model name must not be empty")
-//         .trim()
-//         .isLength({ min: 1 })
-//         .escape(),
-//     body("brand","Model name must not be empty")
-//         .trim()
-//         .isLength({ min: 1 })
-//         .escape(),
-//     body("description")
-//         .optional({ checkFalsy: true })
-//         .trim()
-//         .escape(),
-
-//     (req,res,next) => {
-//         const errors = validationResult(req);
-//         if(!errors.isEmpty()) {
-//             console.log('Errors submitting new shoe');
-//             return;
-//         }
-//         const shoe=new Shoes({
-//             model: req.body.model,
-//             size: req.body.size,
-//             quantity: req.body.quantity,
-//             brand: req.body.brand,
-//             description: req.body.description,
-//         });
-//         shoe.save(e=> {
-//             if(e)return next(e);
-//             res.redirect(shoe.url);   
-//         });
-//     }
-// ]
+];

@@ -14,18 +14,24 @@
     --formBorderLight: rgb(159, 206, 226);
     --cardBk: rgb(153, 148, 179);
     --textLight: rgb(255, 255, 255);
+    --textDark: rgb(37, 39, 48);
     --darkGray: #364954;
     --lightGray: #99AEBB;
     --lightPurple: #C689BC;
     --darkPurple: #8F5686;
-
     --lightBlue: rgb(160, 184, 216);
+    --palette1: #2C6E7A;
+    --palette2: #26958E;
+    --palette3: #54BC8D;
+    --palette4: #9EDE7E;
+    --palette5: #6a9eb3;
+
 }
 body {
     background-color: var(--bkColor);
     font-family: 'Poppins', sans-serif;
 }
-#root, .app {
+.app {
     max-width: 1280px;
     width: 1280px;
     margin: 0 auto;
@@ -34,6 +40,7 @@ body {
     overflow-y: auto;
     min-height: 100vh;
 }
+
 button {
     border-radius: 8px;
     border: 2px solid transparent;
@@ -45,10 +52,15 @@ button {
     color: var(--textLight);
     cursor: pointer;
     font-size: 1.2rem;
-    transition: border-color 0.25s;
 }
-button:hover {
-    border: 2px solid var(--bkColor);
+.menuButton, .editButton {
+    transition: 0.25s ease-in;
+    transition-property: border, background-color;
+}
+.menuButton:hover, .editButton:hover {
+    background-color: white;
+    border: 2px solid var(--darkGray);
+    color: var(--darkGray);
 }
 .mainPage {
     background-color: var(--bkLight);
@@ -89,12 +101,12 @@ input, select, textarea {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: var(--formBk);
+    background-color: white;
     padding: 15px;
     border-radius: 10px;
     font-size: 1.2rem;
     margin: 15px 0;
-    color: var(--formTxt);
+    color: var(--textDark);
     gap: 10px;
 }
 /* ---- Product card ---- */
@@ -117,16 +129,20 @@ input, select, textarea {
     width: 250px;
     border-radius: 10px;
     background-color: var(--cardBk);
+    background-color: var(--palette5);
     padding: 8px 4px;
     cursor: pointer;
-    transition: transform 0.3s ease-in;
-    will-change: transform;
+    transition: background-color 0.3s ease-in;
+    color: var(--textDark);
+    box-shadow: 0px 5px 8px 2px var(--darkGray);
 }
 .productCard:hover {
-    transform: scale(1.05);
+    background-color: #8cbccf;
 }
-
-.imageWrapper {
+.productCard:hover .cardImageWrapper img{
+    transform: scale(1.2);
+}
+.cardImageWrapper {
     width: 150px;
     height: 100px;
     overflow: hidden;
@@ -134,14 +150,15 @@ input, select, textarea {
     justify-content: center;
     align-items: center;    
     border-radius: 6px;
-    overflow: hidden;
+    background-color: white;
 }
-.imageWrapper img {
+.imageWrapper {
+    
+}
+.cardImageWrapper img {
     width: 100%;
-    max-height: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 6px;
-
+    border-radius: 8px;
+    transition: all 0.3s ease-in;
 }
 .cardTitle {
     font-size: 1.2rem;
@@ -164,13 +181,20 @@ input, select, textarea {
     gap:8px;
 }
 .modelHeader {
-    background-color: var(--lightBlue);
-    padding: 8px;
+    background-color: var(--palette5);
+    padding: 16px 8px;
     border-radius: 10px;
     box-shadow: 0px 5px 8px 4px rgb(39, 18, 23);
     margin-bottom: 16px;
     cursor: pointer;
     color: var(--textLight);
+    border: 2px solid transparent;
+    transition: 0.4s ease-in;
+    transition-property: border, box-shadow;
+}
+.modelHeader:hover {
+    border: 2px solid cyan;
+    box-shadow: 0px 5px 8px 4px rgb(93, 147, 168);
 }
 .model {
     font-size: 1.2rem;
@@ -189,9 +213,8 @@ input, select, textarea {
     
 }
 .instanceImageWrapper img {
-    width: 100%;
-    border-radius: 5px;
-    /* object-fit: cover; */
+    height:100%;
+    border-radius: 8px;
 }
 
 
@@ -204,13 +227,50 @@ input, select, textarea {
     border-radius: 5px;
     padding: 5px;
     cursor: pointer;
-    transition: background 0.3s ease-in; 
+    transition: 0.3s ease-in; 
+    transition-property: background-color, color;
 }
 
 .instanceWrapper:hover { 
-    background-color: var(--lightPurple);;
+    background-color: var(--palette5);
+    color: white;
 }
-
+.backButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    background-color: var(--palette2);
+    border: 2px solid transparent;
+    color: var(--textDark);
+}
+.backButton svg{
+    fill: white;
+    transition: transform 0.4s ease-in;
+}
+.backButton:hover {
+    border: 2px solid var(--darkGray);
+}
+.backButton:hover svg{
+    transform: translateX(-16px);
+}
+.addSizeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: fit-content;
+    margin:auto;
+    background-color: var(--palette1);
+    padding: 8px;
+}
+.addSizeButton svg {
+    fill: white;
+    transition: transform 0.3s ease-in;
+}
+.addSizeButton:hover svg {
+    transform: scale(1.2);
+}
 /* ---- Edit quantity ---- */
 .backdrop {
     position: fixed;
@@ -236,8 +296,12 @@ input, select, textarea {
     border: 2px solid var(--formBorderDark);
     border-radius: 10px;
     gap: 16px;
+    overflow-y: auto;
 }
-.editProductHeader, .addShoeModel {
+.editProductHeaderWrapper * {
+    text-align: center;
+}
+.editProductHeader {
     position: fixed;
     z-index: 2;
     top: 32px;
@@ -251,11 +315,23 @@ input, select, textarea {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    text-align: center;
-    
+    text-align: center;    
     gap:8px;
 }
-.editModel {
+.editModel, .addProduct {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 32px;
+}
+.editModel .editModelTitle {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+}
+.editModel input{
+    text-align: center;
+}
+.editQuantity {
     position: fixed;
     z-index: 1;
     top: 32px;
@@ -272,12 +348,18 @@ input, select, textarea {
     text-align: center;
     gap:16px;
 }
-.editModel .editModelTitle {
-    font-size: 1.2rem;
-    margin-bottom: 16px;
+.addShoeTitle {
+    background-color: white;
+    width:fit-content;
+    margin: auto;
+    padding: 5px;
+    border-radius: 5px;
 }
-.editModel input{
-    text-align: center;
+.editSizeText {
+    font-size: 1.2rem;
+    background-color: var(--formBorderLight);
+    padding: 4px;
+    border-radius: 5px;
 }
 .buttonsWrapper {
     display: flex;
@@ -285,10 +367,17 @@ input, select, textarea {
     align-items: center;
     gap: 8px;
 }
+.editProductInner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 8px;
+}
 
 /* ---- Edit header ---- */
-.editProductHeader {
-    /* position: relative; */
+.editProductHeader:hover {
+    border: 2px solid cyan;
 }
 
 .editProductHeader input {
@@ -331,4 +420,7 @@ input, select, textarea {
     font-size: 0.8rem;
     margin: 16px 0;
 }
-/* ---- Add model shoe ---- */
+/* ---- Add model  ---- */
+.addProductBody * {
+    text-align: center;
+}

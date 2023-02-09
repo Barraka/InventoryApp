@@ -21,30 +21,26 @@ function EditModel(props) {
         setData({...tempData});
         setQuantity(e.target.value)
     }
-    function cancel() {
-        setModelInfo('');
-    }
+
     function confirm() {
         const tempval={...props.modelInfo};
         tempval.sizes[props.valSize]=parseInt(quantity);
-        console.log('new quantity: ', quantity);
-        if(quantity==='0') {
-            
-            delete tempval.sizes[props.valSize];
-        }
-
+        if(quantity==='0')delete tempval.sizes[props.valSize];
         props.updateInfo(tempval);
     }
+
     return (
         <div className='editModel'>
-            <div className="editModelTitle">Change inventory quantities: </div>
-            <div >Size: {props.valSize}</div>
-            Quantity : <input type="text" value={quantity || ''} onChange={modify}/>
-            <div className="buttonsWrapper">
-                <button className='editButton' onClick={confirm}>Confirm</button>
-                <button className='editButton' onClick={()=>props.setOutput('')}>Cancel</button>
+            <div className="backdrop"></div>
+            <div className="editQuantity">
+                <div className="editModelTitle">Change inventory quantities: </div>
+                <div className='editSizeText'>Size: {props.valSize}</div>
+                Quantity : <input type="text" value={quantity || ''} onChange={modify}/>
+                <div className="buttonsWrapper">
+                    <button className='editButton' onClick={confirm}>Confirm</button>
+                    <button className='editButton' onClick={()=>props.setOutput('')}>Cancel</button>
+                </div>
             </div>
-
         </div>
     )
 }

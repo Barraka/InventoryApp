@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-function AddSizeShoe(props) {
+function AddSizeShirt(props) {
     const [size, setSize] = useState('');
     const [quantity, setQuantity] = useState('');
     const inputRef = useRef(null);
@@ -14,27 +14,15 @@ function AddSizeShoe(props) {
 
     function validate() {
         //Make checks
-        let sizeErrorMsg=[];
         let qtErrorMsg=[];
-        //Check size
-        if(size==='')sizeErrorMsg.push('Please fill out this field');
-        else if(!isNumeric(size)) {
-            sizeErrorMsg.push('Not a valid number.');
-        } else if(!Number.isInteger(parseFloat(size))) {
-                const check=size.toString().split('.');
-                if(check[1]!=='5')sizeErrorMsg.push('Only .5 digits are allowed for shoe sizes');
-        }
-        
+
         //Check quantity
         if(quantity==='')qtErrorMsg.push('Please fill out this field');
         else if(!isNumeric(quantity))qtErrorMsg.push('Not a valid number');
         else if(!Number.isInteger(parseFloat(quantity)))qtErrorMsg.push('Must be an integer');
         else if(quantity<=0)qtErrorMsg.push('Quantity must be at least 1');
 
-        if(sizeErrorMsg.length) {
-            inputRef.current.setCustomValidity(sizeErrorMsg[0]);
-            inputRef.current.reportValidity();
-        } else if(qtErrorMsg.length) {
+        if(qtErrorMsg.length) {
             qtRef.current.setCustomValidity(qtErrorMsg[0]);
             qtRef.current.reportValidity();
         }   
@@ -42,15 +30,13 @@ function AddSizeShoe(props) {
             const tempval={...props.modelInfo};
             //Remove sizes that are of quantity 0
             for(let x in tempval.sizes) {
-                console.log('x: ', x);
-                if(tempval.sizes[x]==='0') {
-                    delete tempval.sizes[x];
-                }
+                if(tempval.sizes[x]==='0')delete tempval.sizes[x];
             }
             tempval.sizes[size]=parseFloat(quantity);
             props.updateInfo(tempval);
         }        
     }
+
 
     return (
         <div className='editModel'>
@@ -59,7 +45,15 @@ function AddSizeShoe(props) {
                 <div className="newSizeTitle">Choose the size and quantity that needs to be added:</div>
                 <div className="inputGroup">
                     <label htmlFor="size">New size:</label>
-                    <input ref={inputRef} type="text" name="size"  onChange={e=>setSize((e.target.value))} required />
+                    <select ref={inputRef} type="text" name="size"  onChange={e=>setSize((e.target.value))} required >
+                        <option value="XXS">XXS</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
                 </div>
                 <div className="inputGroup">
                     <label htmlFor="quantity">Quantity:</label>
@@ -75,4 +69,4 @@ function AddSizeShoe(props) {
     )
 }
 
-export default AddSizeShoe
+export default AddSizeShirt

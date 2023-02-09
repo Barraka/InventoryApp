@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './styles/styles.css';
 import ShoeModel from './components/ShoeModel';
 import ShirtsPage from './components/ShirtsPage';
+import CoatsPage from './components/CoatsPage';
 
 function App() {
     const [mainPage, setMainPage] = useState(null);
@@ -10,8 +11,9 @@ function App() {
         <div className="mainPage">
             <div className="appTitle">Inventory App</div>
             <div className="menu">
-                <button onClick={()=>setMainPage(<ShoeModel setMainPage={setMainPage}/>)}>Shoes</button>
-                <button onClick={()=>setMainPage(<ShirtsPage setMainPage={setMainPage}/>)}>Shirts</button>
+                <button className='menuButton' onClick={()=>setMainPage(<ShoeModel setMainPage={setMainPage}/>)}>Shoes</button>
+                <button className='menuButton' onClick={()=>setMainPage(<ShirtsPage setMainPage={setMainPage}/>)}>Shirts</button>
+                <button className='menuButton' onClick={()=>setMainPage(<CoatsPage setMainPage={setMainPage}/>)}>Coats</button>
             </div>
             <div className="display">
                 {mainPage}

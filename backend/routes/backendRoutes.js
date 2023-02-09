@@ -4,6 +4,7 @@ const shoesController = require('../controllers/shoesController');
 const shoeModelController = require('../controllers/shoeModelController');
 const brandController = require('../controllers/brandController');
 const shirtController = require('../controllers/shirtController');
+const coatController = require('../controllers/coatController');
 
 router.get('/brands', brandController.getBrands);
 
@@ -20,5 +21,13 @@ router.post('/add_shoe_model', shoeModelController.addShoeModel);
 
 //Shirts
 router.get('/shirts_models', shirtController.getModels);
+router.put('/shirt_models/:id', shirtController.updateModels);
+
+//Coats
+router.get('/coats_models', coatController.getModels);
+router.put('/coats_models/:id', coatController.updateModels);
+router.post('/add_coat_model', coatController.addCoatModel);
+router.delete('/coats_models/:id', coatController.deleteModel);
+// router.put('/coats_setall', coatController.cleanData);
 
 module.exports = router;
