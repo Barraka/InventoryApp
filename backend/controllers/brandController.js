@@ -16,7 +16,7 @@ exports.getBrands= async (req, res, next) => {
             message: results,   
         });
     } catch(e) { 
-        console.log('e: ', e);
+        console.error('e: ', e);
     }
     return;
 }

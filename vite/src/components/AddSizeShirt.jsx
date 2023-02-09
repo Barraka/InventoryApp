@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 
 function AddSizeShirt(props) {
-    const [size, setSize] = useState('');
+    const [size, setSize] = useState('XXS');
     const [quantity, setQuantity] = useState('');
     const inputRef = useRef(null);
     const qtRef = useRef(null);

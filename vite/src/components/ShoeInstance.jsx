@@ -4,7 +4,7 @@ import EditModel from './EditModel';
 import ShoeInstanceSize from './ShoeInstanceSize';
 import EditProductHeader from './EditProductHeader';
 import AddSizeShoe from './AddSizeShoe';
-import ShoeModel from './ShoeModel';
+import ShoeModel from './ShoesPage';
 
 function ShoeInstance(props) {
     const [output, setOutput] = useState();
@@ -13,7 +13,7 @@ function ShoeInstance(props) {
     const [addSize, setAddSize] = useState();
 
     useEffect(()=>{
-        setModelInfo(props.data);        
+        setModelInfo(props.data);       
     },[]);
 
     useEffect(()=>{        
@@ -23,15 +23,7 @@ function ShoeInstance(props) {
             }
             else setDisplaySizes(<div>There are currently no sizes in stock</div>);
         }        
-    },[modelInfo]);
-   
-
-    function sortData(d) {
-        const todisplay={};
-        d.forEach(x=> todisplay[x.size] ? todisplay[x.size]++ : todisplay[x.size]=1);
-        return todisplay;
-    }
-    
+    },[modelInfo]);    
 
     async function updateInfo(o) {
         setOutput('');
@@ -41,7 +33,7 @@ function ShoeInstance(props) {
             if(tempval[i]._id===o._id)tempval[i]={...o};
         }
         setModelInfo({...o});
-        props.setModals(tempval);
+        props.setModels(tempval);
         const targetPath = 'http://localhost:3000/shoe_models/'+props.data._id;
         const outcome=await axios.put(targetPath, o);  
     }
@@ -61,12 +53,6 @@ function ShoeInstance(props) {
         props.setModels(prev=>prev.filter(x=>x._id!==modelInfo._id));
         const targetPath = 'http://localhost:3000/shoe_models/'+modelInfo._id;
         const outcome=await axios.delete(targetPath, modelInfo._id);
-        const newData=outcome.data.message;
-        console.log('new data after deletion: ', newData);
-        
-        // props.setModels(newData);
-        
-        // props.setMainPage(<ShoeModel setMainPage={props.setMainPage}/>);
     }
 
     function newQuantity() {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import ShoeModel from './ShoeModel';
+import ShoeModel from './ShoesPage';
 import ZoomedImage from './ZoomedImage';
 
 function EditProductHeader(props) {

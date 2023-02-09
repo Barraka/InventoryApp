@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import axios from 'axios';
+import placeholderImage from '../assets/empty.jpg';
 
 function ShirtModelAdd(props) {
-    const [data, setData] = useState({model: '', brand: '', price: '', picture:'', sizes:{}});
+    const [data, setData] = useState({model: '', brand: '', brandName: '', price: '', picture:placeholderImage, sizes:{}});
     const [brands, setBrands] = useState([]);
-    const [file, setFile] = useState(null);
     const modelRef = useRef(null);
     const priceRef = useRef(null);
     const brandRef = useRef(null);
@@ -35,7 +35,6 @@ function ShirtModelAdd(props) {
     }
     
     function isNumeric(str) {
-        console.log('in isnumeric: ', typeof str);
         if (typeof str != "string") return false // we only process strings!  
         return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
                !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
@@ -52,7 +51,6 @@ function ShirtModelAdd(props) {
         //Check price
         if(data.price==='')priceErrors.push('Please fill out this field.');
         else if(!isNumeric(data.price)) {
-            console.log('price: ', typeof(data.price)); 
             priceErrors.push('Not a valid price.');
         }        
 
@@ -69,25 +67,26 @@ function ShirtModelAdd(props) {
             let tempdata={...data};
             if(tempdata.brand==='') {
                 const idChosen = brandRef.current.children[brandRef.current.selectedIndex].getAttribute('data-id');
-                tempdata.brand=idChosen;
+                const brandChosen = brandRef.current.children[brandRef.current.selectedIndex].value;
+                tempdata.brand=idChosen;                
+                tempdata.brandName=brandChosen;
             }
+            console.log('shirt about to add: ', tempdata);
             sendData(tempdata);
         }        
     }
 
     async function sendData(o) {
-        let outcome;
-        console.log('about to send: ', o);
+        const prevData=props.models;
         axios.post('http://localhost:3000/add_shirt_model', o)
         .then(res=>  {
-            outcome=res;
-            console.log('outcome shirt send data: ', outcome.message);
-            setFile(res);
+            props.setModels(res.data.message);
         })
         .catch(e=>{
             console.error('error: ', e);
-            const errorArray=e.response?.data?.message?.errors;
+            props.setModels(prevData);
         })
+        props.setModels(prev=>[...prev, o]); 
         props.refresh();        
     }
 

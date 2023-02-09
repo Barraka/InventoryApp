@@ -22,6 +22,8 @@ router.post('/add_shoe_model', shoeModelController.addShoeModel);
 //Shirts
 router.get('/shirts_models', shirtController.getModels);
 router.put('/shirt_models/:id', shirtController.updateModels);
+router.post('/add_shirt_model', shirtController.addShirtModel);
+router.delete('/shirt_models/:id', shirtController.deleteModel);
 
 //Coats
 router.get('/coats_models', coatController.getModels);

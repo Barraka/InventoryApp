@@ -1,24 +1,18 @@
 import React, { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import axios from 'axios';
+import placeholderImage from '../assets/empty.jpg';
 
-
-function ShoeModelAdd(props) {
-    const [data, setData] = useState({model: '', brand: '', price: '', picture:'', sizes:{}});
+function ShoeAdd(props) {
+    const [data, setData] = useState({model: '', brand: '', brandName: '', price: '', picture:placeholderImage, sizes:{}});
     const [brands, setBrands] = useState([]);
-    const [file, setFile] = useState(null);
-
-    useEffect(()=>{
-        setBrands(props.brands);        
-    },[]);
-
-    // useEffect(()=>{
-
-    // },[file]);
-
     const modelRef = useRef(null);
     const priceRef = useRef(null);
     const brandRef = useRef(null);
+
+    useEffect(()=>{
+        setBrands(props.brands);        
+    },[]);    
 
     function getBase64(file) {
         function update(info) {            
@@ -32,7 +26,7 @@ function ShoeModelAdd(props) {
         reader.onerror = function (error) {
           console.error('Error: ', error);
         };
-     }
+    }
 
     function dropdownChange(e) {
         const idChosen = e.target.children[e.target.selectedIndex].getAttribute('data-id');
@@ -73,10 +67,12 @@ function ShoeModelAdd(props) {
             let tempdata={...data};
             if(tempdata.brand==='') {
                 const idChosen = brandRef.current.children[brandRef.current.selectedIndex].getAttribute('data-id');
-                tempdata.brand=idChosen;
+                const brandChosen = brandRef.current.children[brandRef.current.selectedIndex].value;
+                tempdata.brand=idChosen;                
+                tempdata.brandName=brandChosen;             
             }
             sendData(tempdata);
-        }        
+        }               
     }
 
     async function sendData(o) {
@@ -88,7 +84,6 @@ function ShoeModelAdd(props) {
         .catch(e=>{
             console.error('error: ', e);
             props.setModels(prevData);
-            const errorArray=e.response?.data?.message?.errors;
         });
         props.setModels(prev=>[...prev, o]); 
         props.refresh();               
@@ -129,4 +124,4 @@ function ShoeModelAdd(props) {
     )
 }
 
-export default ShoeModelAdd
+export default ShoeAdd

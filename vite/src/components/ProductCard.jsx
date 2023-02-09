@@ -36,7 +36,7 @@ function ProductCard(props) {
                 <img src={props.picture} alt="picture" />
             </div>
             <div className="priceWrapper">{props.data.price} €</div>
-            {/* <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div> */}
+            <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>
 
             
         </div>

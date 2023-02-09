@@ -46,7 +46,6 @@ exports.updateModels = async (req, res, next) => {
 exports.deleteModel = async (req, res, next) => {
     try {
         const id=req.originalUrl.split('/')[2]
-        const tempval={...req.body};
         await client.connect();
         const result = await client.db('inventory').collection('shoe_model').deleteOne({_id:new ObjectId(id)});
         const cursorFind = client.db('inventory').collection('shoe_model').find();
@@ -135,7 +134,7 @@ exports.getInstances = async (req,res,next) => {
 //             message: results,   
 //         });
 //     } catch(e) { 
-//         console.log('e: ', e);
+//         console.error('e: ', e);
 //         res.status(500).send({
 //             message: e
 //         });

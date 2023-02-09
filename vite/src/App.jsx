@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './styles/styles.css';
-import ShoeModel from './components/ShoeModel';
+import ShoeModel from './components/ShoesPage';
 import ShirtsPage from './components/ShirtsPage';
 import CoatsPage from './components/CoatsPage';
 
