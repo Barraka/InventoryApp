@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-function ShirtInstanceSize(props) {
+function ProductInstanceSize(props) {
 
 
     return (
@@ -10,4 +10,4 @@ function ShirtInstanceSize(props) {
     )
 }
 
-export default ShirtInstanceSize
+export default ProductInstanceSize

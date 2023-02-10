@@ -6,6 +6,7 @@ function EditModel(props) {
 
     useEffect(()=>{
         if(props.valQuantity)setQuantity(props.valQuantity);
+        // if(props.nosize)setQuantity(props.modelInfo.quantity);
         setData(props.modelInfo);
     },[]);
 
@@ -23,10 +24,16 @@ function EditModel(props) {
     }
 
     function confirm() {
-        const tempval={...props.modelInfo};
-        tempval.sizes[props.valSize]=parseInt(quantity);
-        if(quantity==='0')delete tempval.sizes[props.valSize];
-        props.updateInfo(tempval);
+        if(props.nosize) {
+            const tempval={...props.modelInfo};
+            tempval.quantity=parseInt(quantity);
+            props.updateInfo(tempval);
+        } else {
+            const tempval={...props.modelInfo};
+            tempval.sizes[props.valSize]=parseInt(quantity);
+            if(quantity==='0')delete tempval.sizes[props.valSize];
+            props.updateInfo(tempval);
+        }        
     }
 
     return (
@@ -34,7 +41,7 @@ function EditModel(props) {
             <div className="backdrop"></div>
             <div className="editQuantity">
                 <div className="editModelTitle">Change inventory quantities: </div>
-                <div className='editSizeText'>Size: {props.valSize}</div>
+                {props.nosize ? null : <div className='editSizeText'>Size: {props.valSize}</div>}
                 Quantity : <input type="text" value={quantity || ''} onChange={modify}/>
                 <div className="buttonsWrapper">
                     <button className='editButton' onClick={confirm}>Confirm</button>

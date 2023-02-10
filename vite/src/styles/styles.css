@@ -87,13 +87,6 @@ input, select, textarea {
     border: 2px solid var(--formBorderLight);
 }
 
-.productInstance {
-    padding: 16px 8px;
-    border-radius: 10px;
-    border: 3px solid var(--darkGray);
-    background-color: var(--textLight);
-    width: 400px;
-}
 /* ---- Shoes ---- */
 .loadingWrapper {
     width: 100px;
@@ -102,7 +95,7 @@ input, select, textarea {
     height:100%;
     width: 100%;
 }
-.shoeModelForm {
+.form {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -185,6 +178,12 @@ input, select, textarea {
     align-items: stretch;
     flex-direction: column;
     gap:8px;
+
+    padding: 16px 8px;
+    border-radius: 10px;
+    border: 3px solid var(--darkGray);
+    background-color: var(--textLight);
+    width: 400px;
 }
 .modelHeader {
     background-color: var(--palette5);
@@ -354,7 +353,7 @@ input, select, textarea {
     text-align: center;
     gap:16px;
 }
-.addShoeTitle {
+.addProductTitle {
     background-color: white;
     width:fit-content;
     margin: auto;

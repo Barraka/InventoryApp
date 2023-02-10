@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import placeholderImage from '../assets/empty.jpg';
 
-function ShirtModelAdd(props) {
+function ShoeAdd(props) {
     const [data, setData] = useState({model: '', brand: '', brandName: '', price: '', picture:placeholderImage, sizes:{}});
     const [brands, setBrands] = useState([]);
     const modelRef = useRef(null);
@@ -12,7 +12,7 @@ function ShirtModelAdd(props) {
 
     useEffect(()=>{
         setBrands(props.brands);        
-    },[]);
+    },[]);    
 
     function getBase64(file) {
         function update(info) {            
@@ -27,13 +27,13 @@ function ShirtModelAdd(props) {
           console.error('Error: ', error);
         };
     }
-    
+
     function dropdownChange(e) {
         const idChosen = e.target.children[e.target.selectedIndex].getAttribute('data-id');
         const brandChosen = e.target.children[e.target.selectedIndex].value;
         setData({...data, brand:idChosen, brandName: brandChosen});
     }
-    
+
     function isNumeric(str) {
         if (typeof str != "string") return false // we only process strings!  
         return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
@@ -63,39 +63,38 @@ function ShirtModelAdd(props) {
             priceRef.current.reportValidity();
         }   
         else {
-            //set default brand id            
+            //set default brand id
             let tempdata={...data};
             if(tempdata.brand==='') {
                 const idChosen = brandRef.current.children[brandRef.current.selectedIndex].getAttribute('data-id');
                 const brandChosen = brandRef.current.children[brandRef.current.selectedIndex].value;
                 tempdata.brand=idChosen;                
-                tempdata.brandName=brandChosen;
+                tempdata.brandName=brandChosen;             
             }
-            console.log('shirt about to add: ', tempdata);
             sendData(tempdata);
-        }        
+        }               
     }
 
     async function sendData(o) {
         const prevData=props.models;
-        axios.post('http://localhost:3000/add_shirt_model', o)
-        .then(res=>  {
+        axios.post('http://localhost:3000/add_shoe_model', o)
+        .then(res=>{
             props.setModels(res.data.message);
-        })
+        })     
         .catch(e=>{
             console.error('error: ', e);
             props.setModels(prevData);
-        })
+        });
         props.setModels(prev=>[...prev, o]); 
-        props.refresh();        
+        props.refresh();               
     }
-
+    
     return (
         <div className="addProduct">
             <div className="backdrop"></div>
             <div className="addProductBody">
-                <div className="addShoeTitle">Add another model:</div>
-                <form className='form shoeModelForm' method='post'>
+                <div className="addProductTitle">Add another model:</div>
+                <form className='form' method='post'>
                     {/* model name */}
                     <label htmlFor="model">Model Name:</label>
                     <input ref={modelRef} type="text" name='model' value={data.model} required onChange={e=>setData({...data, model: e.target.value})}/>
@@ -113,7 +112,7 @@ function ShirtModelAdd(props) {
 
                     {/* price */}
                     <label htmlFor="price">Price:</label>
-                    <input ref={priceRef} name="price" id="price" placeholder='Price' onChange={e=>setData({...data, price: (e.target.value)})} required ></input>
+                    <input ref={priceRef} name="price" id="price" placeholder='Price' onChange={e=>setData({...data, price: e.target.value})} required ></input>
 
                     <div className="buttonsWrapper">
                         <button className='editButton' onClick={validate}>Submit</button>
@@ -121,8 +120,8 @@ function ShirtModelAdd(props) {
                     </div>
                 </form>                
             </div>
-        </div>
+        </div>        
     )
 }
 
-export default ShirtModelAdd
+export default ShoeAdd

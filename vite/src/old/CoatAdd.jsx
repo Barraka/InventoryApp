@@ -93,8 +93,8 @@ function CoatAdd(props) {
         <div className="addProduct">
             <div className="backdrop"></div>
             <div className="addProductBody">
-                <div className="addShoeTitle">Add another model:</div>
-                <form className='form shoeModelForm' method='post'>
+                <div className="addProductTitle">Add another model:</div>
+                <form className='form' method='post'>
                     {/* model name */}
                     <label htmlFor="model">Model Name:</label>
                     <input ref={modelRef} type="text" name='model' value={data.model} required onChange={e=>setData({...data, model: e.target.value})}/>

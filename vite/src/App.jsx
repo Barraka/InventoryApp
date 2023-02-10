@@ -3,6 +3,8 @@ import './styles/styles.css';
 import ShoeModel from './components/ShoesPage';
 import ShirtsPage from './components/ShirtsPage';
 import CoatsPage from './components/CoatsPage';
+import AccessoriesPage from './components/AccessoriesPage';
+import BrandsPage from './components/BrandsPage';
 
 function App() {
     const [mainPage, setMainPage] = useState(null);
@@ -14,6 +16,8 @@ function App() {
                 <button className='menuButton' onClick={()=>setMainPage(<ShoeModel setMainPage={setMainPage}/>)}>Shoes</button>
                 <button className='menuButton' onClick={()=>setMainPage(<ShirtsPage setMainPage={setMainPage}/>)}>Shirts</button>
                 <button className='menuButton' onClick={()=>setMainPage(<CoatsPage setMainPage={setMainPage}/>)}>Coats</button>
+                <button className='menuButton' onClick={()=>setMainPage(<AccessoriesPage setMainPage={setMainPage}/>)}>Accessories</button>
+                <button className='BrandsButton' onClick={()=>setMainPage(<BrandsPage setMainPage={setMainPage}/>)}>Brands</button>
             </div>
             <div className="display">
                 {mainPage}

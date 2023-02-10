@@ -5,6 +5,7 @@ const shoeModelController = require('../controllers/shoeModelController');
 const brandController = require('../controllers/brandController');
 const shirtController = require('../controllers/shirtController');
 const coatController = require('../controllers/coatController');
+const accessoriesController = require('../controllers/accessoriesController');
 
 router.get('/brands', brandController.getBrands);
 
@@ -27,9 +28,14 @@ router.delete('/shirt_models/:id', shirtController.deleteModel);
 
 //Coats
 router.get('/coats_models', coatController.getModels);
-router.put('/coats_models/:id', coatController.updateModels);
+router.put('/coat_models/:id', coatController.updateModels);
 router.post('/add_coat_model', coatController.addCoatModel);
 router.delete('/coats_models/:id', coatController.deleteModel);
-// router.put('/coats_setall', coatController.cleanData);
+
+//Accessories
+router.get('/accessories', accessoriesController.getModels);
+router.put('/accessory/:id', accessoriesController.updateModels);
+router.post('/add_accessory', accessoriesController.addModel);
+router.delete('/accessory/:id', accessoriesController.deleteModel);
 
 module.exports = router;

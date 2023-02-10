@@ -5,7 +5,7 @@ import EditProductHeader from './EditProductHeader';
 import ProductInstanceSize from './ProductInstanceSize';
 import AddSizeShirt from './AddSizeShirt';
 
-function ShirtInstance(props) {
+function AccessoryInstance(props) {
     const [output, setOutput] = useState();
     const [modelInfo, setModelInfo] = useState({});
     const [displaySizes, setDisplaySizes] = useState();
@@ -15,35 +15,41 @@ function ShirtInstance(props) {
         setModelInfo(props.data);        
     },[]);
 
-    useEffect(()=>{        
-        if(Object.keys(modelInfo).length) {            
-            if(Object.keys(modelInfo.sizes).length) {
-                const shirtOrder=['XXXS','XXS','XS','S','M','L','XL','XXL','XXXL'];
-                setDisplaySizes(Object.keys(modelInfo.sizes)
-                .sort((a,b)=> shirtOrder.indexOf(a.toUpperCase()) - shirtOrder.indexOf(b.toUpperCase()))
-                .map(x=> <ProductInstanceSize key={x} x={x} quantity={modelInfo.sizes[x]} displayEdit={displayEdit}/>));
-            }
-            else setDisplaySizes(<div>There are currently no sizes in stock</div>);
-        }        
+    useEffect(()=>{       
+        setDisplaySizes(<div className="instanceWrapper"  onClick={e=>displayEdit(e)}>
+            Quantity: {modelInfo.quantity} 
+        </div>) 
+        // if(Object.keys(modelInfo).length) {            
+        //     if(Object.keys(modelInfo.sizes).length) {
+        //         const shirtOrder=['XXXS','XXS','XS','S','M','L','XL','XXL','XXXL'];
+        //         setDisplaySizes(Object.keys(modelInfo.sizes)
+        //         .sort((a,b)=> shirtOrder.indexOf(a.toUpperCase()) - shirtOrder.indexOf(b.toUpperCase()))
+        //         .map(x=> <ProductInstanceSize key={x} x={x} quantity={modelInfo.sizes[x]} displayEdit={displayEdit}/>));
+        //     }
+        //     else setDisplaySizes(<div className="instanceWrapper"  onClick={e=>displayEdit(e)}>
+        //     Quantity: {modelInfo.quantity} 
+        // </div>)};        
     },[modelInfo]);
 
     async function updateInfo(o) {
         setOutput('');
         setAddSize('');
+        o.price=parseFloat(o.price);
         const tempval=[...props.models];        
         for(let i=0;i<tempval.length;i++) {
             if(tempval[i]._id===o._id)tempval[i]={...o};
         }
         setModelInfo({...o});
         props.setModels(tempval);
-        const targetPath = 'http://localhost:3000/shirt_models/'+props.data._id;
+        const targetPath = 'http://localhost:3000/accessory/'+props.data._id;
         const outcome=await axios.put(targetPath, o);  
+        console.log('update: ', o);
     }
 
     function displayEdit(e) {
-        const valSize=e.target.getAttribute('data-size');
-        const valQuantity=e.target.getAttribute('data-quantity');        
-        setOutput(<EditModel setOutput={setOutput} valSize={valSize} valQuantity={valQuantity} updateInfo={updateInfo} setModelInfo={setModelInfo} modelInfo={modelInfo}/>);
+        // const valSize=e.target.getAttribute('data-size');
+        // const valQuantity=e.target.getAttribute('data-quantity');        
+        setOutput(<EditModel nosize={true} setOutput={setOutput}  valQuantity={modelInfo.quantity} updateInfo={updateInfo} setModelInfo={setModelInfo} modelInfo={modelInfo}/>);
     }
 
     function displayHeader() {
@@ -53,11 +59,9 @@ function ShirtInstance(props) {
     async function deleteProduct() {
         props.refresh();
         props.setModels(prev=>prev.filter(x=>x._id!==modelInfo._id));
-        const targetPath = 'http://localhost:3000/shirt_models/'+props.data._id;
+        const targetPath = 'http://localhost:3000/accessory/'+props.data._id;
         const outcome=await axios.delete(targetPath, modelInfo._id);
     }
-
-    const addIcon=<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17h2v-4h4v-2h-4V7h-2v4H7v2h4Zm1 5q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4 8.65 4 6.325 6.325 4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/></svg>;
 
     return (
         <div className='productInstance'>
@@ -70,7 +74,7 @@ function ShirtInstance(props) {
                 <img src={modelInfo.picture} alt="picture" />
             </div>
         </div>
-        <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>
+        {/* <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button> */}
         {output}
         {displaySizes}
         {addSize}            
@@ -78,4 +82,4 @@ function ShirtInstance(props) {
     )
 }
 
-export default ShirtInstance
+export default AccessoryInstance
