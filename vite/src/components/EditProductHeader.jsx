@@ -12,7 +12,13 @@ function EditProductHeader(props) {
     useEffect(()=>{
         setData(props.data);
         setBrands(props.brands);
+        
     },[]);
+
+    useEffect(()=>{
+        console.log('data: ', props.data);
+        console.log('name: ', props.data.name);
+    },[props.data]);
     
     function getBase64(file) {
         //Check extension first
@@ -57,19 +63,19 @@ function EditProductHeader(props) {
         let priceErrors=[];
         //Check name
         if(data.model==='')modelNameErrors.push('Please fill out this field.');
-        else if(data.model.length<3)modelNameErrors.push('Model name must be at least 3 characters.');
+        else if(!props.forBrand && data.model.length<3)modelNameErrors.push('Model name must be at least 3 characters.');
         //Check price
-        if(data.price==='')priceErrors.push('Please fill out this field.');
-        else if(!isNumeric(priceRef.current.value)) {
+        if(!props.forBrand && data.price==='')priceErrors.push('Please fill out this field.');
+        else if(!props.forBrand && !isNumeric(priceRef.current.value)) {
             priceErrors.push('Not a valid price.');
         }        
-        else if(priceRef.current.value.split('.')[1]?.length >2) priceErrors.push('Only 2 decimal places are allowed');
+        else if(!props.forBrand && priceRef.current.value.split('.')[1]?.length >2) priceErrors.push('Only 2 decimal places are allowed');
 
         if(modelNameErrors.length) {
             modelRef.current.setCustomValidity(modelNameErrors[0]);
             modelRef.current.reportValidity();
         }
-        else if(priceErrors.length) {
+        else if(!props.forBrand && priceErrors.length) {
             priceRef.current.setCustomValidity(priceErrors[0]);
             priceRef.current.reportValidity();
         }   
@@ -77,6 +83,7 @@ function EditProductHeader(props) {
             const tempdata={...data};
             tempdata.price=parseFloat(tempdata.price);
             props.updateInfo(tempdata);
+            console.log('tempdata: ', tempdata);
         }
     }   
     
@@ -90,18 +97,21 @@ function EditProductHeader(props) {
                 <div className="editProductInner">
                     {zoomedImage}
                     <div className="productNameLabel">Product Name:</div>
-                    <input ref={productRef} type="text" value={data.model || ''} onChange={e=>setData({...data, model:e.target.value})}/>
+                    <input autoFocus ref={productRef} type="text" value={data.model || data.name || ''} onChange={e=>setData({...data, model:e.target.value})}/>
 
-                    <div className="productBrand">Brand:</div>
+                    {props.forBrand ? null: 
+                    <><div className="productBrand">Brand:</div>
                     <select name="brand" id="brand" onChange={dropdownChange} value={data.brandName || ''}>
                         {brands.map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)}
-                    </select>
+                    </select></>}
 
                     <div className="productPicture">Producut Image:</div>
                     <input ref={fileRef} type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
 
-                    <div className="productPrice">Price:</div>
+                    {props.forBrand ? null :
+                    <><div className="productPrice">Price:</div>
                     <input ref={priceRef} type="text" value={data.price || ''} onChange={e=>setData({...data, price:(e.target.value)})}/>
+                    </>}
 
                     <div className="headerImageWrapper" onClick={imageZoom}>
                         <img src={data.picture} alt="" />

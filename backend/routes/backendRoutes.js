@@ -9,6 +9,9 @@ const accessoriesController = require('../controllers/accessoriesController');
 
 //Brands
 router.get('/brands', brandController.getBrands);
+router.patch('/brands/:id', brandController.updateBrand);
+router.post('/brands', brandController.addBrand);
+router.delete('/brands/:id', brandController.deleteBrand);
 
 //Shoes
 router.get('/shoe_models', shoeModelController.getModels);

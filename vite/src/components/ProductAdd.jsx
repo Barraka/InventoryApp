@@ -12,8 +12,14 @@ function ProductAdd(props) {
     const fileRef=useRef(null);
 
     useEffect(()=>{
-        setBrands(props.brands);        
+        setBrands(props.brands);
+        if(props.forBrand)setData({model:'', picture: placeholderImage});        
     },[]);
+
+    useEffect(()=>{
+        console.log('brands: ', brands);
+        window.brands=brands;
+    },[brands]);
 
     function getBase64(file) {
         //Check extension first
@@ -60,28 +66,28 @@ function ProductAdd(props) {
         if(data.model==='')modelNameErrors.push('Please fill out this field.');
         else if(data.model.length<3)modelNameErrors.push('Model name must be at least 3 characters.');
         //Check price
-        if(data.price==='')priceErrors.push('Please fill out this field.');
-        else if(!isNumeric(data.price)) {
+        if(!props.forBrand && data.price==='')priceErrors.push('Please fill out this field.');
+        else if(!props.forBrand && !isNumeric(data.price)) {
             priceErrors.push('Not a valid price.');
         }        
         if(modelNameErrors.length) {
             modelRef.current.setCustomValidity(modelNameErrors[0]);
             modelRef.current.reportValidity();
         }
-        else if(priceErrors.length) {
+        else if(!props.forBrand && priceErrors.length) {
             priceRef.current.setCustomValidity(priceErrors[0]);
             priceRef.current.reportValidity();
         }   
         else {
             //set default brand id            
             let tempdata={...data};
-            if(tempdata.brand==='') {
+            if(!props.forBrand && tempdata.brand==='') {
                 const idChosen = brandRef.current.children[brandRef.current.selectedIndex].getAttribute('data-id');
                 const brandChosen = brandRef.current.children[brandRef.current.selectedIndex].value;
                 tempdata.brand=idChosen;                
                 tempdata.brandName=brandChosen;
             }
-            tempdata.price=parseFloat(tempdata.price);
+            if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
             props.sendData(tempdata);
         }        
     }
@@ -90,26 +96,35 @@ function ProductAdd(props) {
         <div className="addProduct">
             <div className="backdrop"></div>
             <div className="addProductBody">
-                <div className="addProductTitle">Add another model:</div>
+                <div className="addProductTitle">Add item:</div>
                 <form className='form' method='post'>
                     {/* model name */}
-                    <label htmlFor="model">Model Name:</label>
-                    <input ref={modelRef} type="text" name='model' value={data.model} required onChange={e=>setData({...data, model: e.target.value})}/>
+                    <label htmlFor="model">{props.forBrand? "Brand" : "Model"} Name:</label>
+                    <input autoFocus ref={modelRef} type="text" name='model' value={data.model} required onChange={e=>setData({...data, model: e.target.value})}/>
                     <br/>
 
                     {/* brand dropdown*/}
-                    <label htmlFor="brand">Brand:</label>
+                    {props.forBrand ? null :
+                    <><label htmlFor="brand">Brand:</label>
                     <select ref={brandRef} name="brand" id="brand" onChange={dropdownChange}>
-                        {brands.map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)}
-                    </select>
+                        {/* {brands.map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)} */}
+                        {brands.sort((a,b)=> {
+                            const nameA=a.name.toLowerCase();
+                            const nameB=b.name.toLowerCase();
+                            if(nameA<nameB)return -1;
+                            else return 1;   
+                        }).map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)}
+                    </select></>}
 
                     {/* picture */}
                     <label htmlFor="image">Upload image (optional)</label>
                     <input ref={fileRef} type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
 
                     {/* price */}
-                    <label htmlFor="price">Price:</label>
+                    {props.forBrand ? null :
+                    <><label htmlFor="price">Price:</label>
                     <input ref={priceRef} name="price" id="price" placeholder='Price' onChange={e=>setData({...data, price: (e.target.value)})} required ></input>
+                    </>}
 
                     <div className="buttonsWrapper">
                         <button className='editButton' onClick={validate}>Submit</button>

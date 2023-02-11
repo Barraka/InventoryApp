@@ -17,6 +17,7 @@ function ProductCard(props) {
         //     setParentProps(tempval)
         // }
         // console.log('props : ', props.data);
+        // console.log('qt: ', props.data.count);
     },[]);
 
     function displayCategory() {
@@ -42,8 +43,8 @@ function ProductCard(props) {
             <div className="cardImageWrapper">
                 <img src={props.picture} alt="picture" />
             </div>
-            {/* <div className="priceWrapper">{props.data.price.toFixed(2)} €</div> */}
-            {props.nosize ?  <div className="inStock">In stock: {props.data.quantity}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
+            {props.data.price ? <div className="priceWrapper">{props.data.price.toFixed(2)} €</div> : null}
+            {props.nosize ?  <div className="inStock">In stock: {props.data.count}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
         </div>
     )
 }

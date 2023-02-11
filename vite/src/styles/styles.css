@@ -25,6 +25,7 @@
     --palette3: #54BC8D;
     --palette4: #9EDE7E;
     --palette5: #6a9eb3;
+    --palette5bis: #6b9eb3;
 
 }
 body {
@@ -56,11 +57,35 @@ button {
 .menuButton, .editButton {
     transition: 0.25s ease-in;
     transition-property: border, background-color;
+    position:relative;
 }
 .menuButton:hover, .editButton:hover {
     background-color: white;
     border: 2px solid var(--darkGray);
     color: var(--darkGray);
+}
+.menuButton:hover::before {
+    content:'';
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;    
+    border-radius: 8px;
+    background-color: yellow;
+    transition: transform 0.3s ease-in;
+    transform: translateX(-100px);
+}
+.menuButton:hover::after {
+    content:'';
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    border-radius: 8px;
+    background-color: yellow;
+    transform: translateX();
 }
 .mainPage {
     background-color: var(--bkLight);
@@ -68,7 +93,7 @@ button {
     border-radius: 10px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
     gap: 16px;
     overflow-y: auto;
@@ -78,6 +103,9 @@ button {
     justify-content: center;
     align-items: center;
     gap: 16px;
+    background-color: var(--palette3);
+    padding: 8px 0;
+    border-radius: 8px;
 }
 
 input, select, textarea {
@@ -86,10 +114,16 @@ input, select, textarea {
     border-radius: 5px;
     border: 2px solid var(--formBorderLight);
 }
+.productPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
 
 /* ---- Shoes ---- */
 .loadingWrapper {
     width: 100px;
+    height: 100px;
 }
 .loadingWrapper img {
     height:100%;
@@ -106,8 +140,9 @@ input, select, textarea {
     font-size: 1.2rem;
     margin: 15px 0;
     color: var(--textDark);
-    gap: 10px;
+    gap: 34px;
 }
+
 /* ---- Product card ---- */
 .models {
     display: flex;
@@ -151,11 +186,12 @@ input, select, textarea {
     border-radius: 6px;
     background-color: white;
 }
-.imageWrapper {
-    
-}
+
 .cardImageWrapper img {
-    width: 100%;
+    /* width: 100%; */
+    width: 150px;
+    height: 100px;
+    object-fit: contain;
     border-radius: 8px;
     transition: all 0.3s ease-in;
 }
@@ -209,8 +245,8 @@ input, select, textarea {
     color: var(--darkGray);
 }
 .instanceImageWrapper {
-    width: 300px;
-    height: 150px;
+    /* width: 300px;
+    height: 150px; */
     margin: auto;
     display: flex;
     justify-content: center;
@@ -218,8 +254,12 @@ input, select, textarea {
     
 }
 .instanceImageWrapper img {
-    height:100%;
+    width: 300px;
+    height: 150px;
+
+    object-fit: contain;
     border-radius: 8px;
+    background-color: white;
 }
 
 
@@ -277,21 +317,52 @@ input, select, textarea {
     transform: scale(1.2);
 }
 /* ---- Edit quantity ---- */
+
+.editProductHeader {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    /* height: 100vh;
+    width: 100vw; */
+    /* overflow-y: auto; */
+    isolation: isolate;
+}
 .backdrop {
     position: fixed;
     top:-100vh;
     left:-100vw;
     right:-100vw;
     bottom: -100vh;
-    z-index: -2; 
+    z-index: -1; 
     background-color: rgba(128,128,128,0.7);
+    isolation: isolate;
 }
-.editProductHeaderWrapper, .editModelInner {
-    position: fixed;
+.editProductHeaderWrapper {
+    /* position: fixed;
     top: 32px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
+    z-index: 3; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; */
+    /* background-color: white; */
+    /* padding: 16px 8px; */
+    /* border: 2px solid var(--formBorderDark); */
+    /* border-radius: 10px; */
+    /* gap: 16px; */
+    height:100vh;
+    overflow: auto;
+
+}
+.editProductHeaderWrapper * {
+    text-align: center;
+}
+
+.editProductInner {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -301,28 +372,8 @@ input, select, textarea {
     border: 2px solid var(--formBorderDark);
     border-radius: 10px;
     gap: 16px;
-    /* overflow-y: auto; */
 }
-.editProductHeaderWrapper * {
-    text-align: center;
-}
-.editProductHeader {
-    position: fixed;
-    z-index: 2;
-    top: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--bkLight);
-    /* border: 2px solid var(--formBorderDark); */
-    border-radius: 10px;
-    /* padding: 16px 8px; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;    
-    gap:8px;
-}
+
 .editModel, .addProduct {
     position: fixed;
     left: 50%;
@@ -381,9 +432,6 @@ input, select, textarea {
 }
 
 /* ---- Edit header ---- */
-.editProductHeader:hover {
-    border: 2px solid cyan;
-}
 
 .editProductHeader input {
     text-align: center;    
@@ -414,11 +462,18 @@ input, select, textarea {
     left:50%;
     transform: translateX(-50%);
     border-radius: 10px;
-    /* overflow: hidden; */
     border: 4px solid var(--formBorderDark);
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.zoomedImage img {
+    width: 500px;
+    height: 500px;
+    max-width: 80vw;
+    max-height: 80vh;
+    object-fit: contain;
+    background-color: white;
 }
 .deleteButton {
     background-color: rgb(182, 52, 52);
@@ -441,7 +496,7 @@ input, select, textarea {
 .category {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
     background-color: var(--bkLight);
     padding: 8px 4px;
@@ -462,9 +517,10 @@ input, select, textarea {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease-in;
+    background-color: var(--palette5bis);
 }
 .brandProduct:hover {
-    background-color: rgba(0, 255, 255, 0.623);
+    background-color:var(--palette2);
 }
 .brandProductList {
     display: flex;
@@ -472,7 +528,6 @@ input, select, textarea {
     align-items: stretch;
     flex-direction: column;
     gap: 8px;
-    /* width:100%;    */
 }
 .brandProductWrapper {
     width: 100px;
@@ -484,9 +539,13 @@ input, select, textarea {
     border-radius: 8px;
 }
 .brandProductWrapper img {
-    width: 100%;
+    /* width: 100%; */
     /* height: 100%; */
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
     border-radius: 8px;
+    background-color: white;
 }
 .brandProductName {
     flex:1;

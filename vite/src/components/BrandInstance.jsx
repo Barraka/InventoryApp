@@ -7,7 +7,6 @@ import EditProductHeader from './EditProductHeader';
 function BrandInstance(props) {
     const [output, setOutput] = useState();
     const [data, setData] = useState();
-    const [modelInfo, setModelInfo] = useState({});
     const [displaySizes, setDisplaySizes] = useState();
     const [displayCategory ,setDisplayCategory] = useState();
     const [addSize, setAddSize] = useState();
@@ -16,7 +15,7 @@ function BrandInstance(props) {
         setData(props.data);
         console.log('data: ', props.data);     
         setDisplayCategory(<div className='brandWrapper'>
-            {Object.keys(props.data.products.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{props.data.products.category1.map(x=> 
+            {Object.keys(props.data.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{props.data.products.category1.map(x=> 
                  (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
             )
             }</div></div>: null}
@@ -42,42 +41,37 @@ function BrandInstance(props) {
         
     // },[displayCategory]);
 
-    // useEffect(()=>{       
-    //     setDisplaySizes(<div className="instanceWrapper"  onClick={e=>displayEdit(e)}>
-    //         Quantity: {modelInfo.quantity} 
-    //     </div>)         
-    // },[modelInfo]);
 
     async function updateInfo(o) {
         setOutput('');
         setAddSize('');
-        o.price=parseFloat(o.price);
-        const tempval=[...props.models];        
-        for(let i=0;i<tempval.length;i++) {
-            if(tempval[i]._id===o._id)tempval[i]={...o};
-        }
-        setModelInfo({...o});
-        props.setModels(tempval);
-        const targetPath = 'http://localhost:3000/accessory/'+props.data._id;
-        const outcome=await axios.put(targetPath, o);  
-        console.log('update: ', o);
+        // o.price=parseFloat(o.price);
+        // const tempval=[...props.models];        
+        // for(let i=0;i<tempval.length;i++) {
+        //     if(tempval[i]._id===o._id)tempval[i]={...o};
+        // }
+        setData({...o});
+        // props.setModels(tempval);
+        const targetPath = 'http://localhost:3000/brands/'+o._id;
+        const outcome=await axios.patch(targetPath, o);  
+        console.log('outcome: ', outcome);
     }
 
     function displayEdit(e) {
         // const valSize=e.target.getAttribute('data-size');
         // const valQuantity=e.target.getAttribute('data-quantity');        
-        setOutput(<EditModel nosize={true} setOutput={setOutput}  valQuantity={modelInfo.quantity} updateInfo={updateInfo} setModelInfo={setModelInfo} modelInfo={modelInfo}/>);
+        setOutput(<EditModel nosize={true} setOutput={setOutput} updateInfo={updateInfo} />);
     }
 
     function displayHeader() {
-        setOutput(<EditProductHeader deleteProduct={deleteProduct} setMainPage={props.setMainPage}  setModals={props.setModals} brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
+        setOutput(<EditProductHeader forBrand={true} deleteProduct={deleteProduct} setMainPage={props.setMainPage}  setModals={props.setModals} brands={props.brands} data={data} updateInfo={updateInfo} setOutput={setOutput}/>);
     }
 
     async function deleteProduct() {
         props.refresh();
-        props.setModels(prev=>prev.filter(x=>x._id!==modelInfo._id));
-        const targetPath = 'http://localhost:3000/accessory/'+props.data._id;
-        const outcome=await axios.delete(targetPath, modelInfo._id);
+        props.setData(prev=>prev.filter(x=>x._id!==data._id));
+        const targetPath = 'http://localhost:3000/brands/'+props.data._id;
+        const outcome=await axios.delete(targetPath, data._id);
     }
 
     return (
@@ -91,7 +85,6 @@ function BrandInstance(props) {
                     <img src={data ? data.picture : ''} alt="picture" />
                 </div>
             </div>
-            {/* <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button> */}
             {displayCategory}
             {output}
             {displaySizes}

@@ -9,7 +9,7 @@ exports.getBrands= async (req, res, next) => {
     try {
         await client.connect();
         const cursor = client.db('inventory').collection('brands').find();
-        cursor.sort();
+        cursor.sort({"name":1});
         const results = await cursor.toArray();
         let processed=0;
         results.forEach(async (x, i)=> {
@@ -25,8 +25,8 @@ exports.getBrands= async (req, res, next) => {
         });
         async function getsum(x) {
             const productCursor1 = client.db('inventory').collection('shoe_model').find({brand:x._id.toString()});
-            const productCursor2 = client.db('inventory').collection('coat_model').find({brand:x._id.toString()});
-            const productCursor3 = client.db('inventory').collection('shirt_model').find({brand:x._id.toString()});
+            const productCursor2 = client.db('inventory').collection('shirt_model').find({brand:x._id.toString()});
+            const productCursor3 = client.db('inventory').collection('coat_model').find({brand:x._id.toString()});            
             const productCursor4 = client.db('inventory').collection('accessories').find({brand:x._id.toString()});
             const count1 = await productCursor1.toArray();
             const count2 = await productCursor2.toArray();
@@ -41,6 +41,66 @@ exports.getBrands= async (req, res, next) => {
         }
         // await client.close();
         
+    } catch(e) { 
+        console.error('e: ', e);
+    }
+    return;
+}
+
+exports.updateBrand = async (req, res, next) => {
+    try {
+        const id=req.originalUrl.split('/')[2]
+        const tempval={...req.body};
+        delete tempval._id;
+        await client.connect();
+        const result = await client.db('inventory').collection('brands').updateOne({_id:new ObjectId(id)}, {"$set": {name: tempval.name, picture: tempval.picture}});
+        res.status(200).send({
+            message: result,   
+        });
+    } catch(e) { 
+        console.error('e: ', e);
+    }
+    return;
+}
+
+exports.addBrand = [
+    body('model', 'Model name must be at least 3 characters').exists().isString().trim().isLength({ min: 3 }).escape(),
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            console.error('errors found, ', errors);
+            res.status(500).send({
+                message: errors,   
+            });
+            return;
+        }
+        //No errors, need to validate data structure
+        try {
+            const data={};
+            data.name=req.body.model;
+            data.picture=req.body.picture;
+            await client.connect();
+            const cursorAdd = await client.db('inventory').collection('brands').insertOne(data); //req.body.brand
+            const cursorFind = client.db('inventory').collection('brands').find();
+            cursorFind.sort({"model":1});
+            const results = await cursorFind.toArray();
+            if(results.length)res.status(200).send({message: results});
+        } catch(e) { 
+            console.error('error adding coat model: ', e);
+        }
+        return;
+      },
+];
+
+exports.deleteBrand = async (req, res, next) => {
+    try {
+        const id=req.originalUrl.split('/')[2]
+        await client.connect();
+        const result = await client.db('inventory').collection('brands').deleteOne({_id:new ObjectId(id)});
+        const cursorFind = client.db('inventory').collection('brands').find();
+        cursorFind.sort({"name":1});
+        const results = await cursorFind.toArray();
+        if(results.length)res.status(200).send({message: results});
     } catch(e) { 
         console.error('e: ', e);
     }
