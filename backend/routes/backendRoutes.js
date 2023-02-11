@@ -7,6 +7,7 @@ const shirtController = require('../controllers/shirtController');
 const coatController = require('../controllers/coatController');
 const accessoriesController = require('../controllers/accessoriesController');
 
+//Brands
 router.get('/brands', brandController.getBrands);
 
 //Shoes

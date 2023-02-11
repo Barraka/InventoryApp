@@ -429,3 +429,66 @@ input, select, textarea {
 .addProductBody * {
     text-align: center;
 }
+
+/* ---- Brand instance  ---- */
+.brandWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+}
+.category {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--bkLight);
+    padding: 8px 4px;
+    border-radius: 8px;
+    gap: 8px;
+}
+.categoryName {
+    font-size: 1.8rem;
+    color: var(--textDark);
+}
+.brandProduct {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 2px solid var(--textDark);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in;
+}
+.brandProduct:hover {
+    background-color: rgba(0, 255, 255, 0.623);
+}
+.brandProductList {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+    /* width:100%;    */
+}
+.brandProductWrapper {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+.brandProductWrapper img {
+    width: 100%;
+    /* height: 100%; */
+    border-radius: 8px;
+}
+.brandProductName {
+    flex:1;
+    text-align: left;
+}
