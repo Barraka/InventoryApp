@@ -43,6 +43,8 @@ exports.updateModels = async (req, res, next) => {
     return;
 }
 
+
+
 exports.deleteModel = async (req, res, next) => {
     try {
         const id=req.originalUrl.split('/')[2]

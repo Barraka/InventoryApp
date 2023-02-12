@@ -65,21 +65,9 @@ function BrandsPage(props) {
                     <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd forBrand={true} sendData={sendData} setModels={setData} refresh={refresh} models={data}  setAddModel={setAddModel} />)}> {addIcon}<span>Add Brand</span> </button> 
                 </div>
                 <div className="models">
-                    {/* {models ? models.map((x,i)=><ProductCard nosize={true}  displayInstance={displayInstance} key={x._id || i} id={x._id} setModels={setModels} data={x} brands={brands} model={x.model} brandName={x.brandName} picture={x.picture || placeholderImage} setMainPage={props.setMainPage}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>} */}
-
                     {data ? data.map((x,i)=><ProductCard nosize={true} forBrands={true}  displayInstance={displayInstance} key={x._id || i} id={x._id} data={x} brandName={x.name} picture={x.picture || placeholderImage} setMainPage={props.setMainPage}/>): null}
                     {loadingImg}
-
-                    {/* {data ? data.map((x,i)=><div key={x._id} className='productCard' onClick={displayInstance}  >
-                        <div className="cardItem cardTitle">{x.name}</div>
-                        <div className="cardImageWrapper">
-                            <img src={x.picture || placeholderImage} alt="picture" />
-                        </div>
-                        <div className='cardItem'>Number of items: {x.count}</div>
-                         
-                         </div>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>} */}
-                </div>
-            
+                </div>            
             </div> : null}
         </div>        
     )

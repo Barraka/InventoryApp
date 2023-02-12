@@ -55,37 +55,37 @@ button {
     font-size: 1.2rem;
 }
 .menuButton, .editButton {
-    transition: 0.25s ease-in;
-    transition-property: border, background-color;
+    transition: all 0.3s ease-in;
     position:relative;
+    z-index: 0;
+    overflow: hidden;
 }
-.menuButton:hover, .editButton:hover {
-    background-color: white;
-    border: 2px solid var(--darkGray);
-    color: var(--darkGray);
-}
-.menuButton:hover::before {
+
+.menuButton::after {
     content:'';
     position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom: 0;    
-    border-radius: 8px;
-    background-color: yellow;
-    transition: transform 0.3s ease-in;
-    transform: translateX(-100px);
-}
-.menuButton:hover::after {
-    content:'';
-    position: absolute;
+    display: block;
     top:0;
     left:0;
     right:0;
     bottom: 0;
     border-radius: 8px;
-    background-color: yellow;
-    transform: translateX();
+    background-color: white;
+    transform: translate(-100%, -100%);
+    transform-origin: top left;
+    transition: transform 0.3s ease-in;
+    z-index: -1;
+}
+.menuButton:hover::after {
+    transform: translateX(0);
+}
+.menuButton:hover {
+    color: var(--darkGray);
+}
+.editButton:hover {
+    background-color: var(--bkLight);
+    color: var(--darkGray);
+    border: 2px solid var(--darkGray);
 }
 .mainPage {
     background-color: var(--bkLight);
@@ -261,8 +261,6 @@ input, select, textarea {
     border-radius: 8px;
     background-color: white;
 }
-
-
 .instanceWrapper { 
     display: flex;
     justify-content: center;
@@ -288,17 +286,43 @@ input, select, textarea {
     background-color: var(--palette2);
     border: 2px solid transparent;
     color: var(--textDark);
+    
+    position:relative;
+    z-index: 0;
+    overflow: hidden;
 }
 .backButton svg{
     fill: white;
-    transition: transform 0.4s ease-in;
+    transition: 0.4s ease-in;
+    transition-property: transform color;
 }
 .backButton:hover {
     border: 2px solid var(--darkGray);
 }
 .backButton:hover svg{
     transform: translateX(-16px);
+    fill:var(--darkGray);
 }
+
+.backButton::after {
+    content:'';
+    position: absolute;
+    display: block;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    border-radius: 8px;
+    background-color: var(--formTxt);
+    transform: translateX(100%);
+    transform-origin: top left;
+    transition: transform 0.3s ease-in;
+    z-index: -1;
+}
+.backButton:hover::after {
+    transform: translateX(0);
+}
+
 .addSizeButton {
     display: flex;
     justify-content: center;
@@ -314,7 +338,7 @@ input, select, textarea {
     transition: transform 0.3s ease-in;
 }
 .addSizeButton:hover svg {
-    transform: scale(1.2);
+    transform: scale(1.6);
 }
 /* ---- Edit quantity ---- */
 
@@ -373,12 +397,26 @@ input, select, textarea {
     border-radius: 10px;
     gap: 16px;
 }
+.editProductInner select, .editProductInner input {
+    cursor: pointer;
+}
 
 .editModel, .addProduct {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     top: 32px;
+}
+.editModelInner {
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    max-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
 }
 .editModel .editModelTitle {
     font-size: 1.2rem;
@@ -479,6 +517,10 @@ input, select, textarea {
     background-color: rgb(182, 52, 52);
     font-size: 0.8rem;
     margin: 16px 0;
+    transition: background-color 0.25s ease-in;
+}
+.deleteButton:hover {
+    background-color: red;
 }
 /* ---- Add model  ---- */
 .addProductBody * {
@@ -550,4 +592,30 @@ input, select, textarea {
 .brandProductName {
     flex:1;
     text-align: left;
+    padding-left: 32px;
+    transition: 0.3s ease-in;
+    transition-property: padding-left color
+}
+.brandProduct:hover .brandProductName {
+    padding-left: 0;
+    color:white;
+}
+
+.warningWrapper {
+    position: fixed;
+    top:32px;
+    left:50%;
+    transform: translateX(-50%);
+    max-width: 300px;
+}
+.warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    gap: 16px;
+    padding: 16px 8px;
+    border-radius: 8px;
+    border: 2px solid var(--textDark);
 }

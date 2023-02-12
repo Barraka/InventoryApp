@@ -17,7 +17,7 @@ function App() {
                 <button className='menuButton' onClick={()=>setMainPage(<ShirtsPage setMainPage={setMainPage}/>)}>Shirts</button>
                 <button className='menuButton' onClick={()=>setMainPage(<CoatsPage setMainPage={setMainPage}/>)}>Coats</button>
                 <button className='menuButton' onClick={()=>setMainPage(<AccessoriesPage setMainPage={setMainPage}/>)}>Accessories</button>
-                <button className='BrandsButton' onClick={()=>setMainPage(<BrandsPage setMainPage={setMainPage}/>)}>Brands</button>
+                <button className='menuButton' onClick={()=>setMainPage(<BrandsPage setMainPage={setMainPage}/>)}>Brands</button>
             </div>
             <div className="display">
                 {mainPage}

@@ -23,7 +23,7 @@ function ProductAdd(props) {
 
     function getBase64(file) {
         //Check extension first
-        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.webp)$/i;
         if (!allowedExtensions.exec(fileRef.current.value)) {
             fileRef.current.setCustomValidity("Not a supported file type");
             fileRef.current.reportValidity();

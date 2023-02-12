@@ -92,17 +92,41 @@ exports.addBrand = [
       },
 ];
 
+async function getsum(x) {
+    const productCursor1 = client.db('inventory').collection('shoe_model').find({brand:x});
+    const productCursor2 = client.db('inventory').collection('shirt_model').find({brand:x});
+    const productCursor3 = client.db('inventory').collection('coat_model').find({brand:x});            
+    const productCursor4 = client.db('inventory').collection('accessories').find({brand:x});
+    const count1 = await productCursor1.toArray();
+    const count2 = await productCursor2.toArray();
+    const count3 = await productCursor3.toArray();
+    const count4 = await productCursor4.toArray();
+    const len1= count1.length;
+    const len2= count2.length;
+    const len3= count3.length;
+    const len4= count4.length;
+    const sum = len1+len2+len3+len4; 
+    return {sum:sum, category1: count1, category2: count2, category3: count3, category4: count4}
+}
+
 exports.deleteBrand = async (req, res, next) => {
-    try {
-        const id=req.originalUrl.split('/')[2]
-        await client.connect();
-        const result = await client.db('inventory').collection('brands').deleteOne({_id:new ObjectId(id)});
-        const cursorFind = client.db('inventory').collection('brands').find();
-        cursorFind.sort({"name":1});
-        const results = await cursorFind.toArray();
-        if(results.length)res.status(200).send({message: results});
-    } catch(e) { 
-        console.error('e: ', e);
-    }
+    const id=req.originalUrl.split('/')[2]
+    const sum= await getsum(id);
+    if(sum.sum>0) {
+        console.log('There are products found');
+        res.status(500).send({message: "There are products attached to the brand. Unable to complete deletion."});
+    } else {
+        try {
+        
+            await client.connect();
+            const result = await client.db('inventory').collection('brands').deleteOne({_id:new ObjectId(id)});
+            const cursorFind = client.db('inventory').collection('brands').find();
+            cursorFind.sort({"name":1});
+            const results = await cursorFind.toArray();
+            if(results.length)res.status(200).send({message: results});
+        } catch(e) { 
+            console.error('e: ', e);
+        }
+    }    
     return;
 }

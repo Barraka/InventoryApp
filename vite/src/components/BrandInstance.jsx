@@ -10,6 +10,7 @@ function BrandInstance(props) {
     const [displaySizes, setDisplaySizes] = useState();
     const [displayCategory ,setDisplayCategory] = useState();
     const [addSize, setAddSize] = useState();
+    const [warning, setWarning] = useState(null);
 
     useEffect(()=>{  
         setData(props.data);
@@ -35,31 +36,19 @@ function BrandInstance(props) {
             )
             }</div></div>: null}
         </div>);
+        console.log('data: ', props.data.count);
     },[]);
-
-    // useEffect(()=>{
-        
-    // },[displayCategory]);
-
 
     async function updateInfo(o) {
         setOutput('');
         setAddSize('');
-        // o.price=parseFloat(o.price);
-        // const tempval=[...props.models];        
-        // for(let i=0;i<tempval.length;i++) {
-        //     if(tempval[i]._id===o._id)tempval[i]={...o};
-        // }
         setData({...o});
-        // props.setModels(tempval);
         const targetPath = 'http://localhost:3000/brands/'+o._id;
         const outcome=await axios.patch(targetPath, o);  
         console.log('outcome: ', outcome);
     }
 
-    function displayEdit(e) {
-        // const valSize=e.target.getAttribute('data-size');
-        // const valQuantity=e.target.getAttribute('data-quantity');        
+    function displayEdit(e) {      
         setOutput(<EditModel nosize={true} setOutput={setOutput} updateInfo={updateInfo} />);
     }
 
@@ -68,10 +57,24 @@ function BrandInstance(props) {
     }
 
     async function deleteProduct() {
-        props.refresh();
-        props.setData(prev=>prev.filter(x=>x._id!==data._id));
-        const targetPath = 'http://localhost:3000/brands/'+props.data._id;
-        const outcome=await axios.delete(targetPath, data._id);
+        if(props.data.count) {         
+            setOutput(null);   
+            setWarning(<div className='warningWrapper'>
+                <div className='backdrop'></div>
+                <div className="warning">
+                    <div className="warningText">
+                        You cannot delete a brand this is linked to existing products.<br/><br /> There is currently {data.count} product{data.count>1 ? 's' : null} under this brand.
+                    </div>
+                    <button className='editButton' onClick={e=>setWarning(null)}>OK</button>
+                </div>
+                
+            </div>);
+        } else {
+            props.refresh();
+            props.setData(prev=>prev.filter(x=>x._id!==data._id));
+            const targetPath = 'http://localhost:3000/brands/'+props.data._id;
+            const outcome=await axios.delete(targetPath, data._id);
+        }
     }
 
     return (
@@ -88,7 +91,8 @@ function BrandInstance(props) {
             {displayCategory}
             {output}
             {displaySizes}
-            {addSize}           
+            {addSize}   
+            {warning}        
         </div>
     )
 }
