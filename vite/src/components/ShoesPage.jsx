@@ -6,7 +6,7 @@ import ShoeInstance from './ShoeInstance';
 import loading from '../assets/loading.gif';
 import ProductAdd from './ProductAdd';
 
-function ShoeModel(props) {
+function ShoesPage(props) {
     const [models, setModels] = useState();
     const [brands, setBrands] = useState([]);
     const [addModel, setAddModel] = useState(null);
@@ -14,7 +14,7 @@ function ShoeModel(props) {
     const [display, setDisplay] = useState(true);
 
     useEffect(()=>{
-        getModelsAndBrands();
+        if(props.dataShoes===undefined)getModelsAndBrands();       
     },[]);
 
     useEffect(()=>{
@@ -26,7 +26,9 @@ function ShoeModel(props) {
             .then(res=>  {
                 let allModels= res.data.message;
                 const allBrands=res.data.brands;
-                setBrands(allBrands);                
+                setBrands(allBrands);  
+                props.setBrands(allBrands); 
+                        
                 allModels.forEach(x=> {
                     //Get the brand Name from the stores _id
                     allBrands.forEach(brand=> {
@@ -39,6 +41,7 @@ function ShoeModel(props) {
                     if(!x.picture)x.picture=placeholderImage;
                 });                
                 setModels([...modelsArray]);
+                props.setDataShoes(modelsArray);
             })
             .catch(console.error);
         return modelsArray;
@@ -54,7 +57,6 @@ function ShoeModel(props) {
             tempData.sizes={38:2, 39.5:1, 40:2, 40.5:5, 41.5:2, 43:3};
             tempvalList.push(tempData);
         });
-        console.log('list: ', tempvalList);
         updateWithCleanData(tempvalList);
     }
 
@@ -77,10 +79,11 @@ function ShoeModel(props) {
         setShoeInstance(null);
     }
 
-    function displayInstance(data) {
-        setDisplay(false);
-        setShoeInstance(<ShoeInstance setShoeInstance={setShoeInstance} refresh={refresh} getModelsAndBrands={getModelsAndBrands} id={data.id} data={data.data} model={data.model} brandName={data.brandName} picture={data.picture} setMainPage={props.setMainPage}  setModels={setModels} brands={brands} models={models}/>);
-    }
+    // function displayInstance(data) {
+    //     console.log('data in displayinstqnce: ', data);
+    //     setDisplay(false);
+    //     setShoeInstance(<ShoeInstance setShoeInstance={setShoeInstance} refresh={refresh} getModelsAndBrands={getModelsAndBrands} id={data.id} data={data.data} model={data.model} brandName={data.brandName} picture={data.picture} setMainPage={props.setMainPage}  setModels={setModels} brands={brands} models={models}/>);
+    // }
 
     async function sendData(o) {
         const prevData=models;
@@ -106,10 +109,11 @@ function ShoeModel(props) {
             <div className="modelsWrapper">
                 <div className="intro">
                     {/* <button className='addSizeButton' onClick={()=>setAddModel(<ShoeAdd setModels={setModels} refresh={refresh} models={models} getModelsAndBrands={getModelsAndBrands} brands={brands} setAddModel={setAddModel} />)}> {addIcon}<span>Add Shoe Model</span> </button>    */}
+
                     <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd sendData={sendData} setModels={setModels} refresh={refresh} models={models} getModelsAndBrands={getModelsAndBrands} brands={brands} setAddModel={setAddModel} />)}> {addIcon}<span>Add Shoe Model</span> </button>              
                 </div>
                 <div className="models">
-                    {models ? models.map((x,i)=><ProductCard  displayInstance={displayInstance} dataFor={'shoes'} key={x._id || i} id={x._id} setModels={setModels} data={x} brands={brands} model={x.model} brandName={x.brandName} picture={x.picture || placeholderImage} setMainPage={props.setMainPage}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                    {props.dataShoes ? props.dataShoes.map((x,i)=><ProductCard dataFor={'shoes'} key={x._id || i} id={x._id} setModels={setModels} data={x} brands={brands} model={x.model} brandName={x.brandName} picture={x.picture || placeholderImage} setMainPage={props.setMainPage}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
                 </div>
             
             </div> : null}
@@ -117,4 +121,4 @@ function ShoeModel(props) {
     )
 }
 
-export default ShoeModel
+export default ShoesPage

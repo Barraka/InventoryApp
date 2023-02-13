@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import EditModel from './EditModel';
 import EditProductHeader from './EditProductHeader';
+import ShoeInstance from './ShoeInstance';
 
 
 function BrandInstance(props) {
@@ -11,33 +12,50 @@ function BrandInstance(props) {
     const [displayCategory ,setDisplayCategory] = useState();
     const [addSize, setAddSize] = useState();
     const [warning, setWarning] = useState(null);
+    const [link, setLink] = useState(null);
 
     useEffect(()=>{  
         setData(props.data);
-        console.log('data: ', props.data);     
-        setDisplayCategory(<div className='brandWrapper'>
-            {Object.keys(props.data.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{props.data.products.category1.map(x=> 
-                 (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
-            )
-            }</div></div>: null}
-
-            {Object.keys(props.data.products.category2).length ? <div className='category'><div className='categoryName'>Shirts</div><div className='brandProductList'>{props.data.products.category2.map(x=> 
-                 (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
-            )
-            }</div></div>: null}
-
-            {Object.keys(props.data.products.category3).length ? <div className='category'><div className='categoryName'>Coats</div><div className='brandProductList'>{props.data.products.category3.map(x=> 
-                 (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
-            )
-            }</div></div>: null}
-            
-            {Object.keys(props.data.products.category4).length ? <div className='category'><div className='categoryName'>Accessories</div><div className='brandProductList'>{props.data.products.category4.map(x=> 
-                 (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
-            )
-            }</div></div>: null}
-        </div>);
+        console.log('brandinstance data: ', props.data);     
+        displayAll();
         console.log('data: ', props.data.count);
     },[]);
+
+    function displayAll() {
+        setDisplayCategory(<div className='brandWrapper'>
+        {Object.keys(props.data.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{props.data.products.category1.map(x=> 
+             (<div onClick={e=>displayInstance(x)} key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        )
+        }</div></div>: null}
+
+        {Object.keys(props.data.products.category2).length ? <div className='category'><div className='categoryName'>Shirts</div><div className='brandProductList'>{props.data.products.category2.map(x=> 
+             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        )
+        }</div></div>: null}
+
+        {Object.keys(props.data.products.category3).length ? <div className='category'><div className='categoryName'>Coats</div><div className='brandProductList'>{props.data.products.category3.map(x=> 
+             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        )
+        }</div></div>: null}
+        
+        {Object.keys(props.data.products.category4).length ? <div className='category'><div className='categoryName'>Accessories</div><div className='brandProductList'>{props.data.products.category4.map(x=> 
+             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        )
+        }</div></div>: null}
+    </div>);
+    }
+
+    function displayInstance(e) {
+        setOutput(null);
+        setAddSize(null);
+        setDisplayCategory(null);
+        setLink(<ShoeInstance refresh={refresh} data={e}/>)
+    }
+
+    function refresh() {
+        setLink(null);
+        displayAll();
+    }
 
     async function updateInfo(o) {
         setOutput('');
@@ -92,7 +110,8 @@ function BrandInstance(props) {
             {output}
             {displaySizes}
             {addSize}   
-            {warning}        
+            {warning}     
+            {link}   
         </div>
     )
 }

@@ -4,15 +4,20 @@ import EditModel from './EditModel';
 import ShoeInstanceSize from './ShoeInstanceSize';
 import EditProductHeader from './EditProductHeader';
 import AddSizeShoe from './AddSizeShoe';
+import { Link, useParams } from 'react-router-dom';
 
 function ShoeInstance(props) {
     const [output, setOutput] = useState();
     const [modelInfo, setModelInfo] = useState({});
     const [displaySizes, setDisplaySizes] = useState();
     const [addSize, setAddSize] = useState();
+    const params = useParams();
+    const shoeID=params.id;
 
     useEffect(()=>{
-        setModelInfo(props.data);       
+        // setModelInfo(props.data);   
+        const target=props.dataShoes.find(x=>x._id===shoeID);
+        setModelInfo(target);
     },[]);
 
     useEffect(()=>{        
@@ -66,7 +71,10 @@ function ShoeInstance(props) {
 
     return (
         <div className='productInstance'>
-            <button className='backButton' onClick={props.refresh}><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="m9 18-6-6 6-6 1.4 1.4L6.8 11H21v2H6.8l3.6 3.6Z"/></svg><span>Back to catalogue</span></button>
+            <Link to="/shoes">
+                <button className='backButton' ><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="m9 18-6-6 6-6 1.4 1.4L6.8 11H21v2H6.8l3.6 3.6Z"/></svg><span>Back to catalogue</span></button>
+            </Link>
+            
             <div className="modelHeader" onClick={displayHeader}>
                 <div className="model">{modelInfo.model}</div>
                 <div className="brandName">{modelInfo.brandName}</div>
