@@ -4,15 +4,20 @@ import EditModel from './EditModel';
 import EditProductHeader from './EditProductHeader';
 import ProductInstanceSize from './ProductInstanceSize';
 import AddSizeShirt from './AddSizeShirt';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 function CoatInstance(props) {
     const [output, setOutput] = useState();
     const [modelInfo, setModelInfo] = useState({});
     const [displaySizes, setDisplaySizes] = useState();
     const [addSize, setAddSize] = useState();
+    const params = useParams();
+    const productID=params.id;
+    const navigate=useNavigate();
 
     useEffect(()=>{
-        setModelInfo(props.data);        
+        const target=props.dataCoats.find(x=>x._id===productID);
+        setModelInfo(target);       
     },[]);
 
     useEffect(()=>{        
@@ -30,14 +35,15 @@ function CoatInstance(props) {
     async function updateInfo(o) {
         setOutput('');
         setAddSize('');
-        const tempval=[...props.models];        
+        const tempval=[...props.dataCoats];        
         for(let i=0;i<tempval.length;i++) {
             if(tempval[i]._id===o._id)tempval[i]={...o};
         }
         setModelInfo({...o});
-        props.setModels(tempval);
-        const targetPath = 'http://localhost:3000/coat_models/'+props.data._id;
-        const outcome=await axios.put(targetPath, o);  
+        props.setDataCoats(tempval);
+        const targetPath = 'http://localhost:3000/coat_models/'+modelInfo._id;
+        const outcome=await axios.put(targetPath, o); 
+        props.getBrands(); 
     }
 
     function displayEdit(e) {
@@ -47,12 +53,12 @@ function CoatInstance(props) {
     }
 
     function displayHeader() {
-        setOutput(<EditProductHeader deleteProduct={deleteProduct} setMainPage={props.setMainPage}  setModals={props.setModals} brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
+        setOutput(<EditProductHeader link={'/coats'} deleteProduct={deleteProduct} brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
     }
 
     async function deleteProduct() {
-        props.refresh();
-        props.setModels(prev=>prev.filter(x=>x._id!==modelInfo._id));
+        navigate('/coats');
+        props.setDataCoats(prev=>prev.filter(x=>x._id!==modelInfo._id));
         const targetPath = 'http://localhost:3000/coats_models/'+modelInfo._id;
         const outcome=await axios.delete(targetPath, modelInfo._id);
     }
@@ -61,19 +67,21 @@ function CoatInstance(props) {
 
     return (
         <div className='productInstance'>
-        <button className='backButton' onClick={props.refresh}><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="m9 18-6-6 6-6 1.4 1.4L6.8 11H21v2H6.8l3.6 3.6Z"/></svg><span>Back to catalogue</span></button>
-        {/* <button onClick={newQuantity}>new quantity</button> */}
-        <div className="modelHeader" onClick={displayHeader}>
-            <div className="model">{modelInfo.model}</div>
-            <div className="brandName">{modelInfo.brandName}</div>
-            <div className="instanceImageWrapper">
-                <img src={modelInfo.picture} alt="picture" />
+            <Link to="/coats">
+                <button className='backButton' ><svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="m9 18-6-6 6-6 1.4 1.4L6.8 11H21v2H6.8l3.6 3.6Z"/></svg><span>Back to catalogue</span></button>
+            </Link>
+
+            <div className="modelHeader" onClick={displayHeader}>
+                <div className="model">{modelInfo.model}</div>
+                <div className="brandName">{modelInfo.brandName}</div>
+                <div className="instanceImageWrapper">
+                    <img src={modelInfo.picture} alt="picture" />
+                </div>
             </div>
-        </div>
-        <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>
-        {output}
-        {displaySizes}
-        {addSize}            
+            <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>
+            {output}
+            {displaySizes}
+            {addSize}            
         </div>
     )
 }

@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import { useEffect, useState } from 'react'
-import axios from 'axios';
 import placeholderImage from '../assets/empty.jpg';
 
 function ProductAdd(props) {
@@ -107,7 +106,6 @@ function ProductAdd(props) {
                     {props.forBrand ? null :
                     <><label htmlFor="brand">Brand:</label>
                     <select ref={brandRef} name="brand" id="brand" onChange={dropdownChange}>
-                        {/* {brands.map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)} */}
                         {brands.sort((a,b)=> {
                             const nameA=a.name.toLowerCase();
                             const nameB=b.name.toLowerCase();

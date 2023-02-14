@@ -1,55 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import placeholderImage from '../assets/empty.jpg';
 import ProductCard from './ProductCard';
 import loading from '../assets/loading.gif';
-import BrandInstance from './BrandInstance';
 import ProductAdd from './ProductAdd';
 
 function BrandsPage(props) {
-    const [data, setData] = useState([]);
     const [productInstance, setProductInstance] = useState(null);
-    const [display, setDisplay] = useState(true);
     const [addModel, setAddModel] = useState();
-    const [loadingImg, setLoadingImg] = useState(<div className='loadingWrapper'><img src={loading} alt="loading" /></div>);
 
     useEffect(()=>{
-        getBrands();
+        if(props.dataBrands===undefined) {
+            props.getBrands();            
+        }
     },[]);
 
-    async function getBrands() {
-        await axios.get('http://localhost:3000/brands')
-            .then(res=>  {
-                const data=res.data.message;
-                console.log('data got: ', data);
-                setData(data);
-                setLoadingImg(null);                
-            })
-            .catch(console.error);
-    }
+    useEffect(()=>{
+    },[props.brands, props.dataBrands, addModel]);
 
     async function refresh() {
-        setDisplay(true);
         setProductInstance(null);
         setAddModel(null);
     }
 
-    function displayInstance(data) {
-        setDisplay(false);
-        setProductInstance(<BrandInstance setProductInstance={setProductInstance} refresh={refresh} id={data._id} data={data} brandName={data.name} picture={data.picture} setData={setData} setMainPage={props.setMainPage} />);
-    }
-
     async function sendData(o) {
-        const prevData=data;
+        const prevDataBrands=[...props.dataBrands];
+        const prevData=[...props.brands];
+        props.setBrands([...prevData, o]); 
+        props.setDataBrands([...prevDataBrands, {...o, count:0, products:{}}]);
         axios.post('http://localhost:3000/brands', o)
         .then(res=>{
-            setData(res.data.message);
+            const result=res.data.message;
+            props.setBrands(result);
+            props.getBrands();
         })     
         .catch(e=>{
             console.error('error: ', e);
-            setData(prevData);
+            props.setBrands(prevData);
+            props.setDataBrands(prevDataBrands);
         });
-        setData(prev=>[...prev, o]); 
+        
         refresh();               
     }
 
@@ -59,16 +48,17 @@ function BrandsPage(props) {
         <div className="productPage">
             {addModel}
             {productInstance}
-            {display ?
             <div className="modelsWrapper">
                 <div className="intro">
-                    <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd forBrand={true} sendData={sendData} setModels={setData} refresh={refresh} models={data}  setAddModel={setAddModel} />)}> {addIcon}<span>Add Brand</span> </button> 
+                    <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} forBrand={true} sendData={sendData}  refresh={refresh} brands={props.brands} />)}> {addIcon}<span>Add Brand</span> </button> 
                 </div>
+
                 <div className="models">
-                    {data ? data.map((x,i)=><ProductCard nosize={true} forBrands={true}  displayInstance={displayInstance} key={x._id || i} id={x._id} data={x} brandName={x.name} picture={x.picture || placeholderImage} setMainPage={props.setMainPage}/>): null}
-                    {loadingImg}
+                    
+                    {props.dataBrands ? props.dataBrands.map((x,i)=><ProductCard nosize={true} key={x._id || i} id={x._id} data={x} target={'/brands/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+
                 </div>            
-            </div> : null}
+            </div>
         </div>        
     )
 }

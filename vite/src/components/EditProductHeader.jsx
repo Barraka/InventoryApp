@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import ConfirmAction from './ConfirmAction';
 import ZoomedImage from './ZoomedImage';
 
 function EditProductHeader(props) {
@@ -8,6 +9,7 @@ function EditProductHeader(props) {
     const productRef=useRef(null);
     const fileRef=useRef(null);
     const priceRef=useRef(null);
+    const [confirm, useConfirm] = useState(null);
 
     useEffect(()=>{
         setData(props.data);
@@ -81,23 +83,31 @@ function EditProductHeader(props) {
         }   
         else {
             const tempdata={...data};
-            tempdata.price=parseFloat(tempdata.price);
+            if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
             props.updateInfo(tempdata);
-            console.log('tempdata: ', tempdata);
+            console.log('end of validate, tempdata: ', tempdata);
         }
     }   
+
+    function beforeDeletion() {
+        props.deleteProduct();
+    }
     
 
     return (
         
         <div className='editProductHeader'>
+            
             <div className="backdrop"></div>
             <div className='editProductHeaderWrapper'>
                 
+                
                 <div className="editProductInner">
+                    {confirm}
                     {zoomedImage}
                     <div className="productNameLabel">Product Name:</div>
-                    <input autoFocus ref={productRef} type="text" value={data.model || data.name || ''} onChange={e=>setData({...data, model:e.target.value})}/>
+                    {props.forBrand ? <input autoFocus ref={productRef} type="text" value={data.name || ''} onChange={e=>setData({...data, name:e.target.value})}/> : <input autoFocus ref={productRef} type="text" value={data.model || ''} onChange={e=>setData({...data, model:e.target.value})}/> }
+                    
 
                     {props.forBrand ? null: 
                     <><div className="productBrand">Brand:</div>
@@ -120,7 +130,10 @@ function EditProductHeader(props) {
                         <button className='editButton' onClick={validate}>Confirm</button>
                         <button className='editButton' onClick={()=>props.setOutput('')}>Cancel</button>
                     </div>
-                    <button className='deleteButton' onClick={props.deleteProduct}>Delete Product</button>
+
+                    <button className='deleteButton' onClick={e=>useConfirm( <ConfirmAction useConfirm={useConfirm} beforeDeletion={beforeDeletion}/> )}>Delete item</button>
+
+                    
                 </div>
                 
             </div>

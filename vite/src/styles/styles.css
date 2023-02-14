@@ -39,7 +39,7 @@ a {
     max-width: 1280px;
     width: 1280px;
     margin: 0 auto;
-    padding: 2rem;
+    /* padding: 2rem; */
     text-align: center;
     overflow-y: auto;
     min-height: 100vh;
@@ -90,12 +90,16 @@ button {
     color: var(--darkGray);
     border: 2px solid var(--darkGray);
 }
+.display {
+    flex: 1;
+}
 .mainPage {
     background-color: var(--bkLight);
-    padding: 15px;
-    border-radius: 10px;
+    /* padding: 15px; */
+    /* border-radius: 10px; */
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: stretch;
     flex-direction: column;
     gap: 16px;
@@ -108,7 +112,7 @@ button {
     gap: 16px;
     background-color: var(--palette3);
     padding: 8px 0;
-    border-radius: 8px;
+    /* border-radius: 8px; */
 }
 
 input, select, textarea {
@@ -121,6 +125,7 @@ input, select, textarea {
     display: flex;
     justify-content: center;
     align-items: center;    
+    
 }
 
 /* ---- Shoes ---- */
@@ -160,7 +165,7 @@ input, select, textarea {
 .productCard {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
     gap: 8px;
     width: 250px;
@@ -188,6 +193,7 @@ input, select, textarea {
     align-items: center;    
     border-radius: 6px;
     background-color: white;
+    margin: 0 auto;
 }
 
 .cardImageWrapper img {
@@ -200,6 +206,7 @@ input, select, textarea {
 }
 .cardTitle {
     font-size: 1.2rem;
+    overflow: hidden;
 }
 .priceWrapper {
     background-color: white;
@@ -235,6 +242,7 @@ input, select, textarea {
     border: 2px solid transparent;
     transition: 0.4s ease-in;
     transition-property: border, box-shadow;
+    overflow: auto;
 }
 .modelHeader:hover {
     border: 2px solid cyan;
@@ -367,20 +375,7 @@ input, select, textarea {
     isolation: isolate;
 }
 .editProductHeaderWrapper {
-    /* position: fixed;
-    top: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3; */
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column; */
-    /* background-color: white; */
-    /* padding: 16px 8px; */
-    /* border: 2px solid var(--formBorderDark); */
-    /* border-radius: 10px; */
-    /* gap: 16px; */
+    position:relative;
     height:100vh;
     overflow: auto;
 
@@ -399,6 +394,7 @@ input, select, textarea {
     border: 2px solid var(--formBorderDark);
     border-radius: 10px;
     gap: 16px;
+    position: relative;
 }
 .editProductInner select, .editProductInner input {
     cursor: pointer;
@@ -507,6 +503,8 @@ input, select, textarea {
     display: flex;
     justify-content: center;
     align-items: center;
+    isolation: isolate;
+    z-index: 1;
 }
 .zoomedImage img {
     width: 500px;
@@ -621,4 +619,26 @@ input, select, textarea {
     padding: 16px 8px;
     border-radius: 8px;
     border: 2px solid var(--textDark);
+}
+.confirmActionWrapper {
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* transform: translateX(-50%); */
+    isolation: isolate;
+    z-index: 1;
+    
+}
+.confirmAction {
+    background-color: white;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 32px;
+    border-radius: 8px;
+    height: 100%;
 }

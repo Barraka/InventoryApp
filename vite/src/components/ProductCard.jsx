@@ -1,60 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-import ShoeInstance from './ShoeInstance'
+import { useNavigate } from 'react-router-dom';
 
 function ProductCard(props) {
-    const [parentProps, setParentProps] = useState({});
     const [target, setTarget] = useState(null);
-    useEffect(()=>{
-        // if(props) {
-        //     const tempval={};
-        //     tempval.setMainPage=props.setMainPage;
-        //     tempval.setModals=props.setModals;
-        //     tempval.brands=props.brands;
-        //     tempval.data=props.data;
-        //     tempval.model=props.model;
-        //     tempval.branName=props.brandName;
-        //     tempval.picture=props.picture;
-        //     setParentProps(tempval)
-        // }
-        // console.log('props : ', props.data);
-        // console.log('qt: ', props.data.count);
-        const tempval=`/shoes/${props.data._id}`;
-        setTarget(tempval);
+    const navigate=useNavigate();
+
+    useEffect(()=>{        
+        if(props.data._id) {
+            const tempval=props.target+props.data._id;
+            setTarget(tempval);
+        }
     },[]);
 
-    function displayCategory() {
-        if(props.forBrands) {
-            props.displayInstance(props.data);
-
-        } else {
-            const tempval={};
-            tempval.id=props.id;
-            tempval.data=props.data;
-            tempval.model=props.model;
-            tempval.brandName=props.brandName;
-            tempval.picture=props.picture;
-            props.displayInstance(tempval);
-        }
-                
+    function redirect() {
+        if(target)navigate(target);
     }
 
     return (
-        // <div className='productCard' key={props.id} data-id={props.id} onClick={displayCategory}>
-        <Link to={target}>
-        <div className='productCard' key={props.id} data-id={props.id} >
-            
-
-                    
-            <div className="cardItem cardTitle">{props.model}</div>
-            <div className="cardItem cardBrand">{props.brandName}</div>
+        <div onClick={redirect} className='productCard' key={props.data._id} data-id={props.data._id} >           
+            <div className="cardItem cardTitle">{props.data.model ? props.data.model : props.data.name}</div>
+            <div className="cardItem cardBrand">{props.data.brandName}</div>
             <div className="cardImageWrapper">
-                <img src={props.picture} alt="picture" />
+                <img src={props.data.picture} alt="picture" />
             </div>
             {props.data.price ? <div className="priceWrapper">{props.data.price.toFixed(2)} €</div> : null}
-            {props.nosize ?  <div className="inStock">In stock: {props.data.count}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
+            {props.nosize ?  <div className="inStock">In stock: {props.data.quantity ? props.data.quantity : props.data.count}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
         </div>
-        </Link>
     )
 }
 

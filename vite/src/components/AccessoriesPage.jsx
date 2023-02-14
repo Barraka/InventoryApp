@@ -3,22 +3,18 @@ import axios from 'axios';
 import placeholderImage from '../assets/empty.jpg';
 import ProductCard from './ProductCard';
 import loading from '../assets/loading.gif';
-import AccessoryInstance from './AccessoryInstance';
 import ProductAdd from './ProductAdd';
 
 function AccessoriesPage(props) {
-    const [models, setModels] = useState();
-    const [brands, setBrands] = useState([]);
     const [addModel, setAddModel] = useState(null);
     const [productInstance, setProductInstance] = useState(null);
-    const [display, setDisplay] = useState(true);
 
     useEffect(()=>{
-        getModelsAndBrands();
+        if(props.dataAccessories===undefined)getModelsAndBrands();  
     },[]);
 
     useEffect(()=>{
-    },[models]);
+    },[props.brands, props.dataAccessories]);
 
     async function getModelsAndBrands() {
         let modelsArray =[];
@@ -26,7 +22,7 @@ function AccessoriesPage(props) {
             .then(res=>  {
                 let allModels= res.data.message;
                 const allBrands=res.data.brands;
-                setBrands(allBrands);                
+                props.setBrands(allBrands);                
                 allModels.forEach(x=> {
                     //Get the brand Name from the stores _id
                     allBrands.forEach(brand=> {
@@ -38,7 +34,7 @@ function AccessoriesPage(props) {
                     //Display a placeholder image if none is provided
                     if(!x.picture)x.picture=placeholderImage;
                 });                
-                setModels([...modelsArray]);
+                props.setDataAccessories([...modelsArray]);
             })
             .catch(console.error);
         return modelsArray;
@@ -46,26 +42,20 @@ function AccessoriesPage(props) {
 
     async function refresh() {
         setAddModel(null);
-        setDisplay(true);
         setProductInstance(null);
     }
 
-    function displayInstance(data) {
-        setDisplay(false);
-        setProductInstance(<AccessoryInstance setProductInstance={setProductInstance} refresh={refresh} getModelsAndBrands={getModelsAndBrands} id={data.id} data={data.data} model={data.model} brandName={data.brandName} picture={data.picture} setMainPage={props.setMainPage}  setModels={setModels} brands={brands} models={models}/>);
-    }
-
     async function sendData(o) {
-        const prevData=models;
+        const prevData=[...props.dataAccessories];
         axios.post('http://localhost:3000/add_accessory', o)
         .then(res=>{
-            setModels(res.data.message);
+            props.setDataAccessories(res.data.message);
         })     
         .catch(e=>{
             console.error('error: ', e);
-            setModels(prevData);
+            props.setDataAccessories(prevData);
         });
-        setModels(prev=>[...prev, o]); 
+        props.setDataAccessories([...prevData, o]);
         refresh();               
     }
 
@@ -75,17 +65,15 @@ function AccessoriesPage(props) {
         <div className="productPage">
             {addModel}
             {productInstance}
-            {display ?
             <div className="modelsWrapper">
                 <div className="intro">
-                    {/* <button className='addSizeButton' onClick={()=>setAddModel(<AccessoryAdd setModels={setModels} refresh={refresh} models={models} getModelsAndBrands={getModelsAndBrands} brands={brands} setAddModel={setAddModel} />)}> {addIcon}<span>Add Accessory</span> </button>            */}
-                    <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd sendData={sendData} setModels={setModels} refresh={refresh} models={models} getModelsAndBrands={getModelsAndBrands} brands={brands} setAddModel={setAddModel} />)}> {addIcon}<span>Add Accessory</span> </button>      
+                    <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} sendData={sendData}  refresh={refresh} brands={props.brands} />)}> {addIcon}<span>Add Accessory</span> </button>       
                 </div>
                 <div className="models">
-                    {models ? models.map((x,i)=><ProductCard nosize={true}  displayInstance={displayInstance} key={x._id || i} id={x._id} setModels={setModels} data={x} brands={brands} model={x.model} brandName={x.brandName} picture={x.picture || placeholderImage} setMainPage={props.setMainPage}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                    {props.dataAccessories ? props.dataAccessories.map((x,i)=><ProductCard nosize={true} key={x._id || i} id={x._id} data={x} target={'/accessories/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}    
                 </div>
             
-            </div> : null}
+            </div>
         </div>        
     )
 }
