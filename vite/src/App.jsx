@@ -17,41 +17,21 @@ import Home from './components/Home';
 
 function App() {
     const [brands, setBrands] = useState();
+    const [dataBrands, setDataBrands] = useState();
     const [dataShoes, setDataShoes] = useState();
     const [dataShirts, setDataShirts] = useState();
     const [dataCoats, setDataCoats] = useState();
-    const [dataAccessories, setDataAccessories] = useState();    
-    const [dataBrands, setDataBrands] = useState();
+    const [dataAccessories, setDataAccessories] = useState(); 
+    
+    useEffect(()=>{
+        console.log('update on coats: ', dataCoats);
+    },[dataCoats]);
 
-    // useEffect(()=>{
-    //     console.log('getting brands in app useeffect');
-    //     getBrands();        
-    // },[dataShoes, dataShirts, dataCoats, dataAccessories]);
-
-    async function getBrands() {
-        await axios.get('http://localhost:3000/brands')
-            .then(res=>  {
-                const data=res.data.message;
-                const justBrands = res.data.justBrands;
-                const shoes = res.data.shoes;
-                const shirts = res.data.shirts;
-                const coats = res.data.coats;
-                const accessories = res.data.accessories;
-                setDataBrands(data);
-                setBrands(justBrands);    
-                setDataShoes(shoes);
-                setDataShirts(shirts);
-                setDataCoats(coats);
-                setDataAccessories(accessories);
-                console.log('got brands in app getBrands(): ', data);    
-                console.log('shoes: ', shoes);     
-            })
-            .catch(console.error);
-    }
 
     return (        
             <div className="mainPage">
                 <div className="menu">
+                    <button onClick={e=>console.log(dataBrands)}>All brands state</button>
                     <Link to="/">
                         <img className='homeIcon' src={homeIcon}  alt="home" />
                     </Link>
@@ -75,20 +55,20 @@ function App() {
                 <div className="display">
                     <Routes>           
                         <Route path="/" element={<Home />} />             
-                        <Route path="/shoes" element={<ShoesPage getBrands={getBrands} brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} />} />                            
-                        <Route path="/shoes/:id" element={<ShoeInstance getBrands={getBrands} brands={brands}  dataShoes={dataShoes} setDataShoes={setDataShoes} setBrands={setBrands}/>}  />
+                        <Route path="/shoes" element={<ShoesPage setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}/>} />                            
+                        <Route path="/shoes/:id" element={<ShoeInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}/>}  />
 
-                        <Route path="/shirts" element={<ShirtsPage getBrands={getBrands} dataShirts={dataShirts} setDataShirts={setDataShirts} brands={brands} setBrands={setBrands} />} />
-                        <Route path="/shirts/:id" element={<ShirtInstance getBrands={getBrands} brands={brands}  dataShirts={dataShirts} setDataShirts={setDataShirts} setBrands={setBrands} />} />
+                        <Route path="/shirts" element={<ShirtsPage  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}/>} />
+                        <Route path="/shirts/:id" element={<ShirtInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
 
-                        <Route path="/coats" element={<CoatsPage getBrands={getBrands} brands={brands} setBrands={setBrands} dataCoats={dataCoats} setDataCoats={setDataCoats} />} />
-                        <Route path="/coats/:id" element={<CoatInstance getBrands={getBrands} brands={brands}  dataCoats={dataCoats} setDataCoats={setDataCoats} setBrands={setBrands} />}  />
+                        <Route path="/coats" element={<CoatsPage  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
+                        <Route path="/coats/:id" element={<CoatInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />}  />
 
-                        <Route path="/accessories" element={<AccessoriesPage getBrands={getBrands} brands={brands} setBrands={setBrands} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
-                        <Route path="/accessories/:id" element={<AccessoryInstance getBrands={getBrands} brands={brands}  dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}  setBrands={setBrands} />} />
+                        <Route path="/accessories" element={<AccessoriesPage  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
+                        <Route path="/accessories/:id" element={<AccessoryInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
 
-                        <Route path="/brands" element={<BrandsPage getBrands={getBrands} brands={brands} setBrands={setBrands} setDataBrands={setDataBrands} dataBrands={dataBrands}/>} />
-                        <Route path="/brands/:id" element={<BrandInstance brands={brands}  setBrands={setBrands} dataBrands={dataBrands} setDataBrands={setDataBrands} getBrands={getBrands} />} />
+                        <Route path="/brands" element={<BrandsPage  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}/>} />
+                        <Route path="/brands/:id" element={<BrandInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}  />} />
                     </Routes>
                     
                 </div>

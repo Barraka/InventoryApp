@@ -40,7 +40,7 @@ async function getShirts() {
 
 async function getShoes() {
     let modelsArray =[];
-    await axios.get('http://localhost:3000/shoes_models')
+    await axios.get('http://localhost:3000/shoe_models')
         .then(res=>  {
             const  result= res.data.message;   
             outputShoes=result;                        

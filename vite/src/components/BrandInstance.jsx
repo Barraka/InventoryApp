@@ -47,23 +47,23 @@ function BrandInstance(props) {
             return;
         }
         setDisplayCategory(<div className='brandWrapper'>
-        {Object.keys(target.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{target.products.category1.map(x=> 
-             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/shoes/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        {Object.keys(target.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{target.products.category1.map((x,i)=> 
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/shoes/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
 
-        {Object.keys(target.products.category2).length ? <div className='category'><div className='categoryName'>Shirts</div><div className='brandProductList'>{target.products.category2.map(x=> 
-             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/shirts/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        {Object.keys(target.products.category2).length ? <div className='category'><div className='categoryName'>Shirts</div><div className='brandProductList'>{target.products.category2.map((x,i)=> 
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/shirts/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
 
-        {Object.keys(target.products.category3).length ? <div className='category'><div className='categoryName'>Coats</div><div className='brandProductList'>{target.products.category3.map(x=> 
-             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/coats/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        {Object.keys(target.products.category3).length ? <div className='category'><div className='categoryName'>Coats</div><div className='brandProductList'>{target.products.category3.map((x,i)=> 
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/coats/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
         
-        {Object.keys(target.products.category4).length ? <div className='category'><div className='categoryName'>Accessories</div><div className='brandProductList'>{target.products.category4.map(x=> 
-             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/accessories/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+        {Object.keys(target.products.category4).length ? <div className='category'><div className='categoryName'>Accessories</div><div className='brandProductList'>{target.products.category4.map((x,i)=> 
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/accessories/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
     </div>);
