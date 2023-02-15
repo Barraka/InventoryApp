@@ -3,6 +3,7 @@ import axios from 'axios';
 import EditModel from './EditModel';
 import EditProductHeader from './EditProductHeader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import loading from '../assets/loading.gif';
 
 function AccessoryInstance(props) {
     const [output, setOutput] = useState();
@@ -14,8 +15,11 @@ function AccessoryInstance(props) {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        const target=props.dataAccessories.find(x=>x._id===productID);
-        setModelInfo(target);        
+        if(props.dataAccessories===undefined)getModelsAndBrands();
+        else {
+            const target=props.dataAccessories.find(x=>x._id===productID);
+            setModelInfo(target); 
+        }       
     },[]);
 
     useEffect(()=>{       
@@ -24,6 +28,32 @@ function AccessoryInstance(props) {
         </div>) 
        
     },[modelInfo]);
+
+    async function getModelsAndBrands() {
+        let modelsArray =[];
+        await axios.get('http://localhost:3000/accessories')
+            .then(res=>  {
+                let allModels= res.data.message;
+                const allBrands=res.data.brands;
+                props.setBrands(allBrands);                
+                allModels.forEach(x=> {
+                    //Get the brand Name from the stores _id
+                    allBrands.forEach(brand=> {
+                        if(x.brand===brand._id) {
+                            x.brandName = brand.name;
+                            modelsArray.push(x);
+                        }                    
+                    });
+                    //Display a placeholder image if none is provided
+                    if(!x.picture)x.picture=placeholderImage;
+                });                
+                props.setDataAccessories([...modelsArray]);
+                const target=modelsArray.find(x=>x._id===productID);
+                setModelInfo(target);
+            })
+            .catch(console.error);
+        return modelsArray;
+    }
 
     async function updateInfo(o) {
         setOutput('');
@@ -64,7 +94,7 @@ function AccessoryInstance(props) {
             <div className="model">{modelInfo.model}</div>
             <div className="brandName">{modelInfo.brandName}</div>
             <div className="instanceImageWrapper">
-                <img src={modelInfo.picture} alt="picture" />
+                <img src={modelInfo.picture===undefined ? loading : modelInfo.picture} alt="picture" />
             </div>
         </div>
 

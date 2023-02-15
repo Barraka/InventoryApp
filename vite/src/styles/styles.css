@@ -39,7 +39,6 @@ a {
     max-width: 1280px;
     width: 1280px;
     margin: 0 auto;
-    /* padding: 2rem; */
     text-align: center;
     overflow-y: auto;
     min-height: 100vh;
@@ -48,7 +47,7 @@ a {
 button {
     border-radius: 8px;
     border: 2px solid transparent;
-    padding: 0.6em 1.2em;
+    padding: 0.4em 1.2em;
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
@@ -95,8 +94,6 @@ button {
 }
 .mainPage {
     background-color: var(--bkLight);
-    /* padding: 15px; */
-    /* border-radius: 10px; */
     min-height: 100vh;
     display: flex;
     justify-content: flex-start;
@@ -108,11 +105,10 @@ button {
 .menu {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items:center;
     gap: 16px;
-    background-color: var(--palette3);
+    background-color: var(--palette5);
     padding: 8px 0;
-    /* border-radius: 8px; */
 }
 
 input, select, textarea {
@@ -124,7 +120,8 @@ input, select, textarea {
 .productPage {
     display: flex;
     justify-content: center;
-    align-items: center;    
+    align-items: center;   
+    position: relative; 
     
 }
 
@@ -197,7 +194,6 @@ input, select, textarea {
 }
 
 .cardImageWrapper img {
-    /* width: 100%; */
     width: 150px;
     height: 100px;
     object-fit: contain;
@@ -256,8 +252,6 @@ input, select, textarea {
     color: var(--darkGray);
 }
 .instanceImageWrapper {
-    /* width: 300px;
-    height: 150px; */
     margin: auto;
     display: flex;
     justify-content: center;
@@ -301,6 +295,7 @@ input, select, textarea {
     position:relative;
     z-index: 0;
     overflow: hidden;
+    width: 100%;
 }
 .backButton svg{
     fill: white;
@@ -359,9 +354,6 @@ input, select, textarea {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    /* height: 100vh;
-    width: 100vw; */
-    /* overflow-y: auto; */
     isolation: isolate;
 }
 .backdrop {
@@ -582,8 +574,6 @@ input, select, textarea {
     border-radius: 8px;
 }
 .brandProductWrapper img {
-    /* width: 100%; */
-    /* height: 100%; */
     width: 100px;
     height: 100px;
     object-fit: contain;
@@ -626,10 +616,8 @@ input, select, textarea {
     left: 0;
     right: 0;
     bottom: 0;
-    /* transform: translateX(-50%); */
     isolation: isolate;
-    z-index: 1;
-    
+    z-index: 1;    
 }
 .confirmAction {
     background-color: white;
@@ -641,4 +629,45 @@ input, select, textarea {
     gap: 32px;
     border-radius: 8px;
     height: 100%;
+}
+/* ---- Home ---- */
+.homePage {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column; 
+}
+
+.homeTitle {
+    border-radius: 20px;
+    width: 50%;
+    margin: 0 auto;
+    background: #6a9eb3;
+}
+.homeBig {
+    font-family: 'Anton', sans-serif;
+    font-size: 6rem;
+}
+.homeSmall {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    padding-left: 64px;
+}
+.svgWrapper {
+    width: 600px;
+    top:0;
+    margin: 0 auto;
+}
+.svgWrapper img {
+    width: 100%;
+}
+.homeIcon {
+    width: 50px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.homeIcon:hover {
+    background-color: var(--palette2);
 }

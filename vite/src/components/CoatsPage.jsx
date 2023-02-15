@@ -10,11 +10,11 @@ function CoatsPage(props) {
     const [productInstance, setProductInstance] = useState(null);
 
     useEffect(()=>{
-        if(props.dataShoes===undefined)getModelsAndBrands();         
+        if(props.dataCoats===undefined)getModelsAndBrands();         
     },[]);
 
     useEffect(()=>{
-    },[props.brands, props.dataShirts]);
+    },[props.brands, props.dataCoats]);
 
     async function getModelsAndBrands() {
         let modelsArray =[];

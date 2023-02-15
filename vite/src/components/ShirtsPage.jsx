@@ -4,13 +4,15 @@ import axios from 'axios';
 import ProductCard from './ProductCard';
 import loading from '../assets/loading.gif';
 import ProductAdd from './ProductAdd';
+import getBrandsFile, {outputBrands} from '../crud';
+
 
 function ShirtsPage(props) {
     const [addModel, setAddModel] = useState(null);
     const [shirtInstance, setShirtInstance] = useState(null);
 
     useEffect(()=>{
-        if(props.dataShoes===undefined)getModelsAndBrands();         
+        if(props.dataShirts===undefined)getModelsAndBrands();         
     },[]);
 
     useEffect(()=>{
@@ -40,6 +42,28 @@ function ShirtsPage(props) {
         return modelsArray;
     }
 
+
+    let modelsArray =[];
+
+    async function getOne() {        
+        await axios.get('http://localhost:3000/test')
+            .then(res=>  {
+                let data= res.data.message; 
+                console.log('data recieved one: ', data);
+                modelsArray.push(data);                           
+            })
+            .catch(console.error);
+    }
+
+    async function other() {
+        const resultBrands =  await getBrandsFile();
+        const resultFile = outputBrands;
+
+        console.log('resultBrands: ', resultBrands);
+        console.log('resultFile: ', resultFile);
+        // modelsArray.push(result);
+    }
+
     async function refresh() {
         setAddModel(null);
         setShirtInstance(null);
@@ -50,6 +74,7 @@ function ShirtsPage(props) {
         axios.post('http://localhost:3000/add_shirt_model', o)
         .then(res=>  {
             props.setDataShirts(res.data.message);
+            props.getBrands();
         })
         .catch(e=>{
             console.error('error: ', e);
@@ -65,6 +90,7 @@ function ShirtsPage(props) {
         <div className="productPage">
             {addModel}
             {shirtInstance}
+            <button onClick={other}>get one</button>
             <div className="modelsWrapper">
 
                 <div className="intro">

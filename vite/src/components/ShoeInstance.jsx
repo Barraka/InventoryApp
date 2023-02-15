@@ -5,6 +5,7 @@ import ShoeInstanceSize from './ShoeInstanceSize';
 import EditProductHeader from './EditProductHeader';
 import AddSizeShoe from './AddSizeShoe';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import loading from '../assets/loading.gif';
 
 function ShoeInstance(props) {
     const [output, setOutput] = useState();
@@ -16,8 +17,13 @@ function ShoeInstance(props) {
     const navigate=useNavigate();
 
     useEffect(()=>{ 
-        const target=props.dataShoes.find(x=>x._id===productID);
-        setModelInfo(target);
+        if(props.dataShoes===undefined)getModelsAndBrands();
+        else {
+            console.log('data shoe in shoe isntance useeffect: ', props.dataShoes);
+            const target=props.dataShoes.find(x=>x._id===productID);
+            setModelInfo(target); 
+            console.log('target: ', target);
+        }
     },[]);
 
     useEffect(()=>{        
@@ -28,6 +34,34 @@ function ShoeInstance(props) {
             else setDisplaySizes(<div>There are currently no sizes in stock</div>);
         }        
     },[modelInfo]);    
+
+    async function getModelsAndBrands() {
+        console.log('getting models shoes');
+        let modelsArray =[];
+        await axios.get('http://localhost:3000/shoe_models')
+            .then(res=>  {
+                console.log('got shoe model');
+                let allModels= res.data.message;
+                const allBrands=res.data.brands;  
+                props.setBrands(allBrands);                         
+                allModels.forEach(x=> {
+                    //Get the brand Name from the stores _id
+                    allBrands.forEach(brand=> {
+                        if(x.brand===brand._id) {
+                            x.brandName = brand.name;
+                            modelsArray.push(x);
+                        }                    
+                    });
+                    //Display a placeholder image if none is provided
+                    if(!x.picture)x.picture=placeholderImage;
+                });                
+                props.setDataShoes(modelsArray);
+                const target=modelsArray.find(x=>x._id===productID);
+                setModelInfo(target);
+            })
+            .catch(console.error);
+        return modelsArray;
+    }
 
     async function updateInfo(o) {
         setOutput('');
@@ -72,7 +106,7 @@ function ShoeInstance(props) {
                 <div className="model">{modelInfo.model}</div>
                 <div className="brandName">{modelInfo.brandName}</div>
                 <div className="instanceImageWrapper">
-                    <img src={modelInfo.picture} alt="picture" />
+                    <img src={modelInfo.picture===undefined ? loading : modelInfo.picture} alt="picture" />
                 </div>
             </div>
             <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShoe setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>

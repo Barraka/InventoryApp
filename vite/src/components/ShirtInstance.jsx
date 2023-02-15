@@ -5,6 +5,7 @@ import EditProductHeader from './EditProductHeader';
 import ProductInstanceSize from './ProductInstanceSize';
 import AddSizeShirt from './AddSizeShirt';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import loading from '../assets/loading.gif';
 
 function ShirtInstance(props) {
     const [output, setOutput] = useState();
@@ -16,9 +17,16 @@ function ShirtInstance(props) {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        const target=props.dataShirts.find(x=>x._id===productID);
-        setModelInfo(target);        
+        if(props.dataShirts===undefined)getModelsAndBrands();
+        else {
+            const target=props.dataShirts.find(x=>x._id===productID);
+            setModelInfo(target); 
+        }               
     },[]);
+
+    useEffect(()=>{
+    
+    },[props.dataShirts, props.brands]);
 
     useEffect(()=>{        
         if(Object.keys(modelInfo).length) {            
@@ -31,6 +39,33 @@ function ShirtInstance(props) {
             else setDisplaySizes(<div>There are currently no sizes in stock</div>);
         }        
     },[modelInfo]);
+
+    async function getModelsAndBrands() {
+        let modelsArray =[];
+        await axios.get('http://localhost:3000/shirts_models')
+            .then(res=>  {
+                let allModels= res.data.message;                
+                const allBrands=res.data.brands;
+                props.setBrands(allBrands);
+                allModels.forEach(x=> {
+                    //Get the brand Name from the stores _id
+                    allBrands.forEach(brand=> {
+                        if(x.brand===brand._id) {
+                            x.brandName = brand.name;
+                            modelsArray.push(x);                            
+                        }                    
+                    });
+                    //Display a placeholder image if none is provided
+                    if(!x.picture)x.picture=placeholderImage;
+                });                
+                props.setDataShirts(modelsArray);
+                const target=modelsArray.find(x=>x._id===productID);
+                setModelInfo(target);
+            })
+            .catch(console.error);
+        return modelsArray;
+    }
+
 
     async function updateInfo(o) {
         setOutput('');
@@ -74,7 +109,7 @@ function ShirtInstance(props) {
             <div className="model">{modelInfo.model}</div>
             <div className="brandName">{modelInfo.brandName}</div>
             <div className="instanceImageWrapper">
-                <img src={modelInfo.picture} alt="picture" />
+                <img src={modelInfo.picture===undefined ? loading : modelInfo.picture} alt="picture" />
             </div>
         </div>
         <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>

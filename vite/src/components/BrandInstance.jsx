@@ -3,6 +3,7 @@ import axios from 'axios';
 import EditProductHeader from './EditProductHeader';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import placeholderImage from '../assets/empty.jpg';
+import loading from '../assets/loading.gif';
 
 
 function BrandInstance(props) {
@@ -17,10 +18,27 @@ function BrandInstance(props) {
     const navigate=useNavigate();
 
     useEffect(()=>{  
-        const target= props.dataBrands.find(x=>x._id===productID);
-        setData(target);     
-        displayAll(target);
+        if(props.dataBrands===undefined)getBrands();
+        else {
+            const target=props.dataBrands.find(x=>x._id===productID);
+            setData(target);     
+            displayAll(target); 
+        } 
     },[]);
+
+    async function getBrands() {
+        await axios.get('http://localhost:3000/brands')
+            .then(res=>  {
+                const data=res.data.message;
+                const justBrands = res.data.justBrands;
+                props.setDataBrands(data);
+                props.setBrands(justBrands); 
+                const target=data.find(x=>x._id===productID);
+                setData(target);
+                displayAll(target);       
+            })
+            .catch(console.error);
+    }
 
     function displayAll(target) {
         if(target===undefined || target.products===undefined ||!Object.keys(target.products).length) {
@@ -30,22 +48,22 @@ function BrandInstance(props) {
         }
         setDisplayCategory(<div className='brandWrapper'>
         {Object.keys(target.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{target.products.category1.map(x=> 
-             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/shoes/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
 
         {Object.keys(target.products.category2).length ? <div className='category'><div className='categoryName'>Shirts</div><div className='brandProductList'>{target.products.category2.map(x=> 
-             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/shirts/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
 
         {Object.keys(target.products.category3).length ? <div className='category'><div className='categoryName'>Coats</div><div className='brandProductList'>{target.products.category3.map(x=> 
-             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/coats/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
         
         {Object.keys(target.products.category4).length ? <div className='category'><div className='categoryName'>Accessories</div><div className='brandProductList'>{target.products.category4.map(x=> 
-             (<div key={x._id} className="brandProduct"><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id} className="brandProduct" onClick={e=>navigate('/accessories/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
     </div>);
@@ -109,7 +127,7 @@ function BrandInstance(props) {
                 <div className="model">{data ? data.name : ''}</div>
                 <div className="brandName"></div>
                 <div className="instanceImageWrapper">
-                    <img src={data ? data.picture ? data.picture : placeholderImage : placeholderImage} alt="picture" />
+                    <img src={data.picture ? data.picture : loading} alt="picture" />
                 </div>
             </div>
             {displayCategory}
