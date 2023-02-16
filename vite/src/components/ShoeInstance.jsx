@@ -6,6 +6,7 @@ import EditProductHeader from './EditProductHeader';
 import AddSizeShoe from './AddSizeShoe';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import loading from '../assets/loading.gif';
+import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
 function ShoeInstance(props) {
     const [output, setOutput] = useState();
@@ -17,14 +18,24 @@ function ShoeInstance(props) {
     const navigate=useNavigate();
 
     useEffect(()=>{ 
-        if(props.dataShoes===undefined)getModelsAndBrands();
+        if(props.dataShoes===undefined)getDataShoes(); 
         else {
-            console.log('data shoe in shoe isntance useeffect: ', props.dataShoes);
             const target=props.dataShoes.find(x=>x._id===productID);
             setModelInfo(target); 
-            console.log('target: ', target);
         }
+        if(props.brands===undefined)getDataBrands();
+        if(props.dataBrands===undefined)getDataAllBrands(); 
+        if(props.dataShirts===undefined)getDataShirts();
+        if(props.dataCoats===undefined)getDataCoats();
+        if(props.dataAccessories===undefined)getDataAccessories();         
     },[]);
+
+    useEffect(()=>{
+        if(props.dataShoes) {
+            const target=props.dataShoes.find(x=>x._id===productID);
+            setModelInfo(target);
+        } 
+    },[props.dataShoes]);
 
     useEffect(()=>{        
         if(Object.keys(modelInfo).length) {            
@@ -33,47 +44,68 @@ function ShoeInstance(props) {
             }
             else setDisplaySizes(<div>There are currently no sizes in stock</div>);
         }        
-    },[modelInfo]);    
-
-    async function getModelsAndBrands() {
-        console.log('getting models shoes');
-        let modelsArray =[];
-        await axios.get('http://localhost:3000/shoe_models')
-            .then(res=>  {
-                console.log('got shoe model');
-                let allModels= res.data.message;
-                const allBrands=res.data.brands;  
-                props.setBrands(allBrands);                         
-                allModels.forEach(x=> {
-                    //Get the brand Name from the stores _id
-                    allBrands.forEach(brand=> {
-                        if(x.brand===brand._id) {
-                            x.brandName = brand.name;
-                            modelsArray.push(x);
-                        }                    
-                    });
-                    //Display a placeholder image if none is provided
-                    if(!x.picture)x.picture=placeholderImage;
-                });                
-                props.setDataShoes(modelsArray);
-                const target=modelsArray.find(x=>x._id===productID);
-                setModelInfo(target);
-            })
-            .catch(console.error);
-        return modelsArray;
+    },[modelInfo]);  
+    
+    async function getDataShoes() {
+        console.log('making a request for shoes');
+        await getShoes();
+        const result=outputShoes;
+        props.setDataShoes(result);
     }
+    async function getDataShirts() {
+        console.log('making a request for shirts');
+        await getShirts();
+        const result=outputShirts;
+        props.setDataShirts(result);
+    }
+    async function getDataCoats() {
+        console.log('making a request for coats');
+        await getCoats();
+        const result=outputCoats;
+        props.setDataCoats(result);
+    }
+    async function getDataAccessories() {
+        console.log('making a request for acccessories');
+        await getAccessories();
+        const result=outputAccessories;
+        props.setDataAccessories(result);
+    }
+    async function getDataBrands() {
+        console.log('making a request for just brands');
+        await getJustBrands();
+        const result=outputJustBrands;
+        props.setBrands(result);
+    }
+    async function getDataAllBrands() {
+        console.log('making a request for all brands');
+        await getAllBrands();
+        const result=outputAllBrands;
+        props.setDataBrands(result);
+    }
+
+
 
     async function updateInfo(o) {
         setOutput('');
-        setAddSize('');
-        const tempval=[...props.dataShoes];        
+        setAddSize('');        
+        const tempval=[...props.dataShoes]; 
+        const prevData = JSON.parse(JSON.stringify(tempval));
         for(let i=0;i<tempval.length;i++) {
             if(tempval[i]._id===o._id)tempval[i]={...o};
         }
         setModelInfo({...o});
         props.setDataShoes(tempval);
+        console.log('updated dataShoes: ',tempval);
         const targetPath = 'http://localhost:3000/shoe_models/'+modelInfo._id;
-        const outcome=await axios.put(targetPath, o);  
+        await axios.put(targetPath, o)
+        .then(res=> {
+            // getDataAllBrands();
+            props.setDataBrands();
+        })
+        .catch(e=> {
+            console.error('Error updating info: ', e);
+            props.setDataShoes(prevData);
+        });
     }
 
     function displayEdit(e) {
@@ -88,10 +120,17 @@ function ShoeInstance(props) {
 
     async function deleteProduct() {
         navigate('/shoes');
+        const prev=modelInfo;
         props.setDataShoes(prev=>prev.filter(x=>x._id!==modelInfo._id));
         const targetPath = 'http://localhost:3000/shoe_models/'+modelInfo._id;
-        const outcome=await axios.delete(targetPath, modelInfo._id);
-        
+        await axios.delete(targetPath, modelInfo._id)
+        .then(res=> {
+            getDataAllBrands();
+        })
+        .catch(e=> {
+            console.error('Error deleting product: ', e);
+            props.setDataShoes(prev);
+        });        
     }
 
     const addIcon=<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M11 17h2v-4h4v-2h-4V7h-2v4H7v2h4Zm1 5q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-2q3.35 0 5.675-2.325Q20 15.35 20 12q0-3.35-2.325-5.675Q15.35 4 12 4 8.65 4 6.325 6.325 4 8.65 4 12q0 3.35 2.325 5.675Q8.65 20 12 20Zm0-8Z"/></svg>;

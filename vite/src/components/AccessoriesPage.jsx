@@ -121,7 +121,7 @@ function AccessoriesPage(props) {
                     <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} sendData={sendData}  refresh={refresh} brands={props.brands} />)}> {addIcon}<span>Add Accessory</span> </button>       
                 </div>
                 <div className="models">
-                    {props.dataAccessories ? props.dataAccessories.map((x,i)=><ProductCard nosize={true} key={x._id || i} id={x._id} data={x} target={'/accessories/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}    
+                    {props.dataAccessories ? props.dataAccessories.map((x,i)=><ProductCard nosize={true} key={x._id || i} brands={props.brands} id={x._id} data={x} target={'/accessories/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}    
                 </div>
             
             </div>

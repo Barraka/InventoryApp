@@ -4,41 +4,80 @@ import EditProductHeader from './EditProductHeader';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import placeholderImage from '../assets/empty.jpg';
 import loading from '../assets/loading.gif';
+import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
 
 function BrandInstance(props) {
     const [output, setOutput] = useState();
     const [data, setData] = useState({});
-    const [displaySizes, setDisplaySizes] = useState();
     const [displayCategory ,setDisplayCategory] = useState();
-    const [addSize, setAddSize] = useState();
     const [warning, setWarning] = useState(null);
     const params = useParams();
     const productID=params.id;
     const navigate=useNavigate();
 
     useEffect(()=>{  
-        if(props.dataBrands===undefined)getBrands();
+        if(props.dataBrands===undefined)getDataBrands(); 
         else {
             const target=props.dataBrands.find(x=>x._id===productID);
-            setData(target);     
+            setData(target); 
             displayAll(target); 
-        } 
+        }
+        if(props.dataShoes==undefined)getDataShoes();
+        if(props.brands===undefined)getDataBrands();
+        if(props.dataBrands===undefined)getDataAllBrands(); 
+        if(props.dataShirts===undefined)getDataShirts();
+        if(props.dataCoats===undefined)getDataCoats();
+        if(props.dataAccessories===undefined)getDataAccessories();
+ 
     },[]);
 
-    async function getBrands() {
-        await axios.get('http://localhost:3000/brands')
-            .then(res=>  {
-                const data=res.data.message;
-                const justBrands = res.data.justBrands;
-                props.setDataBrands(data);
-                props.setBrands(justBrands); 
-                const target=data.find(x=>x._id===productID);
-                setData(target);
-                displayAll(target);       
-            })
-            .catch(console.error);
+    useEffect(()=>{
+        if(props.dataBrands) {
+            const target=props.dataBrands.find(x=>x._id===productID);
+            setData(target);
+            displayAll(target);
+        } 
+    },[props.dataBrands]);
+
+    async function getDataShoes() {
+        console.log('making a request for shoes');
+        await getShoes();
+        const result=outputShoes;
+        props.setDataShoes(result);
     }
+    async function getDataShirts() {
+        console.log('making a request for shirts');
+        await getShirts();
+        const result=outputShirts;
+        props.setDataShirts(result);
+    }
+    async function getDataCoats() {
+        console.log('making a request for coats');
+        await getCoats();
+        const result=outputCoats;
+        props.setDataCoats(result);
+    }
+    async function getDataAccessories() {
+        console.log('making a request for acccessories');
+        await getAccessories();
+        const result=outputAccessories;
+        props.setDataAccessories(result);
+    }
+    async function getDataBrands() {
+        console.log('making a request for just brands');
+        await getJustBrands();
+        const result=outputJustBrands;
+        props.setBrands(result);
+    }
+    async function getDataAllBrands() {
+        console.log('making a request for all brands');
+        await getAllBrands();
+        const result=outputAllBrands;
+        props.setDataBrands(result);
+    }
+
+
 
     function displayAll(target) {
         if(target===undefined || target.products===undefined ||!Object.keys(target.products).length) {
@@ -71,10 +110,11 @@ function BrandInstance(props) {
 
     async function updateInfo(o) {
         setOutput('');
-        setAddSize('');
         setData({...o});
         const tempval1=[...props.dataBrands]; 
         const tempval2=[...props.brands]; 
+        const prevDataBrands = JSON.parse(JSON.stringify(tempval1));
+        const prevBrands = JSON.parse(JSON.stringify(tempval2));
         for(let i=0;i<tempval2.length;i++) {
             if(tempval2[i]._id===o._id)tempval2[i]={...o};
         }
@@ -84,8 +124,15 @@ function BrandInstance(props) {
                 tempval1[i].picture=o.picture;
             }
         }
+        props.setDataBrands(tempval2);
+        props.setBrands(tempval1);
         const targetPath = 'http://localhost:3000/brands/'+o._id;
-        const outcome=await axios.patch(targetPath, o);  
+        await axios.put(targetPath, o)
+        .catch(e=> {
+            console.error('Error updating info: ', e);
+            props.setDataBrands(prevDataBrands);
+            props.setBrands(prevBrands);
+        }); 
     }
 
     function displayHeader() {
@@ -108,10 +155,18 @@ function BrandInstance(props) {
             </div>);
         } else {
             navigate('/brands');
+            const prev=data;
             props.setDataBrands(prev=>prev.filter(x=>x._id!==data._id));
             props.setBrands(prev=>prev.filter(x=>x._id!==data._id));
             const targetPath = 'http://localhost:3000/brands/'+data._id;
-            const outcome=await axios.delete(targetPath, data._id);
+            await axios.delete(targetPath, modelInfo._id)
+            .then(res=> {
+                getDataAllBrands();
+            })
+            .catch(e=> {
+                console.error('Error deleting product: ', e);
+                props.setDataBrands(prev);
+            });
             
         }
     }
@@ -131,9 +186,7 @@ function BrandInstance(props) {
                 </div>
             </div>
             {displayCategory}
-            {output}
-            {displaySizes}
-            {addSize}   
+            {output} 
             {warning}     
         </div>
     )

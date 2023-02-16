@@ -4,6 +4,7 @@ import EditModel from './EditModel';
 import EditProductHeader from './EditProductHeader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import loading from '../assets/loading.gif';
+import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
 function AccessoryInstance(props) {
     const [output, setOutput] = useState();
@@ -15,12 +16,24 @@ function AccessoryInstance(props) {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        if(props.dataAccessories===undefined)getModelsAndBrands();
+        if(props.dataAccessories===undefined)getDataAccessories(); 
         else {
             const target=props.dataAccessories.find(x=>x._id===productID);
             setModelInfo(target); 
-        }       
+        }
+        if(props.shoes===undefined)getDataShoes();
+        if(props.brands===undefined)getDataBrands();
+        if(props.dataBrands===undefined)getDataAllBrands(); 
+        if(props.dataShirts===undefined)getDataShirts();
+        if(props.dataCoats===undefined)getDataCoats();   
     },[]);
+
+    useEffect(()=>{
+        if(props.dataAccessories) {
+            const target=props.dataAccessories.find(x=>x._id===productID);
+            setModelInfo(target);
+        } 
+    },[props.dataAccessories]);
 
     useEffect(()=>{       
         setDisplaySizes(<div className="instanceWrapper"  onClick={e=>displayEdit(e)}>
@@ -29,44 +42,63 @@ function AccessoryInstance(props) {
        
     },[modelInfo]);
 
-    async function getModelsAndBrands() {
-        let modelsArray =[];
-        await axios.get('http://localhost:3000/accessories')
-            .then(res=>  {
-                let allModels= res.data.message;
-                const allBrands=res.data.brands;
-                props.setBrands(allBrands);                
-                allModels.forEach(x=> {
-                    //Get the brand Name from the stores _id
-                    allBrands.forEach(brand=> {
-                        if(x.brand===brand._id) {
-                            x.brandName = brand.name;
-                            modelsArray.push(x);
-                        }                    
-                    });
-                    //Display a placeholder image if none is provided
-                    if(!x.picture)x.picture=placeholderImage;
-                });                
-                props.setDataAccessories([...modelsArray]);
-                const target=modelsArray.find(x=>x._id===productID);
-                setModelInfo(target);
-            })
-            .catch(console.error);
-        return modelsArray;
+    async function getDataShoes() {
+        console.log('making a request for shoes');
+        await getShoes();
+        const result=outputShoes;
+        props.setDataShoes(result);
+    }
+    async function getDataShirts() {
+        console.log('making a request for shirts');
+        await getShirts();
+        const result=outputShirts;
+        props.setDataShirts(result);
+    }
+    async function getDataCoats() {
+        console.log('making a request for coats');
+        await getCoats();
+        const result=outputCoats;
+        props.setDataCoats(result);
+    }
+    async function getDataAccessories() {
+        console.log('making a request for acccessories');
+        await getAccessories();
+        const result=outputAccessories;
+        props.setDataAccessories(result);
+    }
+    async function getDataBrands() {
+        console.log('making a request for just brands');
+        await getJustBrands();
+        const result=outputJustBrands;
+        props.setBrands(result);
+    }
+    async function getDataAllBrands() {
+        console.log('making a request for all brands');
+        await getAllBrands();
+        const result=outputAllBrands;
+        props.setDataBrands(result);
     }
 
     async function updateInfo(o) {
         setOutput('');
         setAddSize('');
         o.price=parseFloat(o.price);
-        const tempval=[...props.dataAccessories];        
+        const tempval=[...props.dataAccessories]; 
+        const prevData = JSON.parse(JSON.stringify(tempval));       
         for(let i=0;i<tempval.length;i++) {
             if(tempval[i]._id===o._id)tempval[i]={...o};
         }
         setModelInfo({...o});
         props.setDataAccessories(tempval);
         const targetPath = 'http://localhost:3000/accessory/'+modelInfo._id;
-        const outcome=await axios.put(targetPath, o);  
+        await axios.put(targetPath, o)
+        .then(res=> {
+            getDataAllBrands();
+        })
+        .catch(e=> {
+            console.error('Error updating info: ', e);
+            props.setDataAccessories(prevData);
+        });  
     }
 
     function displayEdit(e) {      
@@ -79,9 +111,17 @@ function AccessoryInstance(props) {
 
     async function deleteProduct() {
         navigate('/accessories');
+        const prev=modelInfo;
         props.setDataAccessories(prev=>prev.filter(x=>x._id!==modelInfo._id));
         const targetPath = 'http://localhost:3000/accessory/'+modelInfo._id;
-        const outcome=await axios.delete(targetPath, modelInfo._id);
+        await axios.delete(targetPath, modelInfo._id)
+        .then(res=> {
+            getDataAllBrands();
+        })
+        .catch(e=> {
+            console.error('Error deleting product: ', e);
+            props.setDataAccessories(prev);
+        }); 
     }
 
     return (

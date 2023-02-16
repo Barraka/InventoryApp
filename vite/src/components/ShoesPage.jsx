@@ -12,10 +12,8 @@ function ShoesPage(props) {
 
     useEffect(()=>{
         if(props.dataShoes===undefined)getDataShoes(); 
-        if(props.brands===undefined) {
-            getDataBrands();
-            getDataAllBrands(); 
-        }
+        if(props.brands===undefined)getDataBrands();
+        if(props.dataBrands===undefined)getDataAllBrands(); 
         if(props.dataShirts===undefined)getDataShirts();
         if(props.dataCoats===undefined)getDataCoats();
         if(props.dataAccessories===undefined)getDataAccessories();      
@@ -28,6 +26,7 @@ function ShoesPage(props) {
         console.log('making a request for shoes');
         await getShoes();
         const result=outputShoes;
+        console.log('outputshoes: ', outputShoes);
         props.setDataShoes(result);
     }
     async function getDataShirts() {
@@ -97,7 +96,7 @@ function ShoesPage(props) {
                     <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} sendData={sendData} refresh={refresh} brands={props.brands}  />)}> {addIcon}<span>Add Shoe Model</span> </button>              
                 </div>
                 <div className="models">
-                    {props.dataShoes ? props.dataShoes.map((x,i)=><ProductCard key={x._id || i} id={x._id} data={x} target={'/shoes/'} />): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                    {props.dataShoes ? props.dataShoes.map((x,i)=><ProductCard key={x._id || i} id={x._id} brands={props.brands} data={x} target={'/shoes/'} />): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
                 </div>
             
             </div>

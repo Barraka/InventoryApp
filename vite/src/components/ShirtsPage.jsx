@@ -126,7 +126,7 @@ function ShirtsPage(props) {
                 </div>
 
                 <div className="models">
-                    {props.dataShirts ? props.dataShirts.map((x,i)=><ProductCard key={x._id || i} id={x._id} data={x} target={'/shirts/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                    {props.dataShirts ? props.dataShirts.map((x,i)=><ProductCard key={x._id || i} id={x._id} brands={props.brands} data={x} target={'/shirts/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
                 </div>
             
             </div>

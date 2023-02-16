@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
 import './styles/styles.css';
 import homeIcon from './assets/house.png';
-import axios from 'axios';
 import ShoesPage from './components/ShoesPage';
 import ShirtsPage from './components/ShirtsPage';
 import CoatsPage from './components/CoatsPage';

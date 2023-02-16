@@ -19,12 +19,12 @@ function ProductCard(props) {
     return (
         <div onClick={redirect} className='productCard' key={props.data._id} data-id={props.data._id} >           
             <div className="cardItem cardTitle">{props.data.model ? props.data.model : props.data.name}</div>
-            <div className="cardItem cardBrand">{props.data.brandName}</div>
+            {props.nosize ? null :  <div className="cardItem cardBrand">{props.brands?.find(x=>props.data.brand===x._id).name}</div> }
             <div className="cardImageWrapper">
                 <img src={props.data.picture} alt="picture" />
             </div>
             {props.data.price ? <div className="priceWrapper">{props.data.price.toFixed(2)} €</div> : null}
-            {props.nosize ?  <div className="inStock">In stock: {props.data.quantity ? props.data.quantity : props.data.count}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
+            {props.nosize ?  <div className="inStock">Products: {props.count}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
         </div>
     )
 }

@@ -127,7 +127,7 @@ function CoatsPage(props) {
                 </div>
 
                 <div className="models">
-                {props.dataCoats ? props.dataCoats.map((x,i)=><ProductCard key={x._id || i} id={x._id} data={x} target={'/coats/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                {props.dataCoats ? props.dataCoats.map((x,i)=><ProductCard key={x._id || i} id={x._id} brands={props.brands} data={x} target={'/coats/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
                 </div>
             
             </div>
