@@ -14,11 +14,10 @@ patchModels = async (req, res, next) => {
 
 async function run() {
     const result = await patchModels()
-    .then(res => {
-        console.log('res: ', res);   
+    .then(res => { 
         client.close();
     });
-    // console.log('result: ', result);
+
 }
 
 run();

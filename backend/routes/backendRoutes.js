@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const shoesController = require('../controllers/shoesController');
-const shoeModelController = require('../controllers/shoeModelController');
+const shoeController = require('../controllers/shoeController');
 const brandController = require('../controllers/brandController');
 const shirtController = require('../controllers/shirtController');
 const coatController = require('../controllers/coatController');
@@ -9,20 +8,16 @@ const accessoriesController = require('../controllers/accessoriesController');
 
 //Brands
 router.get('/brands', brandController.getBrands);
-router.patch('/brands/:id', brandController.updateBrand);
+router.get('/justBrands', brandController.justBrands);
+router.put('/brands/:id', brandController.updateBrand);
 router.post('/brands', brandController.addBrand);
 router.delete('/brands/:id', brandController.deleteBrand);
 
 //Shoes
-router.get('/shoe_models', shoeModelController.getModels);
-router.put('/shoe_models/:id', shoeModelController.updateModels);
-router.put('/clean_data', shoeModelController.cleanData);
-router.delete('/shoe_models/:id', shoeModelController.deleteModel);
-router.get('/shoe_instances/:id', shoeModelController.getInstances);
-router.get("/shoes", (req, res, next)=>{
-    shoeModelController.getModelByName('Sole Reaper',req, res, next)
-});
-router.post('/add_shoe_model', shoeModelController.addShoeModel);
+router.get('/shoe_models', shoeController.getModels);
+router.put('/shoe_models/:id', shoeController.updateModels);
+router.post('/add_shoe_model', shoeController.addShoeModel);
+router.delete('/shoe_models/:id', shoeController.deleteModel);
 
 //Shirts
 router.get('/shirts_models', shirtController.getModels);

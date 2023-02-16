@@ -2,25 +2,35 @@ const async = require("async");
 const { body, validationResult } = require("express-validator");
 const {client} = require('../connect');
 const ObjectId = require('mongodb').ObjectId;
+const {refreshData, emptyData} = require('./brandController');
+
+let tempDataForGet=undefined;
 
 exports.getModels = async (req, res, next) => {
-    try {
-        await client.connect();
-        const cursor = client.db('inventory').collection('shirt_model').find();
-        cursor.sort({"model":1});
-        const results = await cursor.toArray();
-        //Get the brand names for each model
-        let brandCursor= client.db('inventory').collection('brands').find();
-        brandCursor = await brandCursor.toArray();
-        await client.close();
-        res.status(200).send({
-            message: results,   
-            brands:brandCursor,
-        });
-    } catch(e) { 
-        console.error('e: ', e);
+    if(!tempDataForGet) {
+        try {
+            await client.connect();
+            const cursor = client.db('inventory').collection('shirt_model').find();
+            cursor.sort({"model":1});
+            const results = await cursor.toArray();
+            tempDataForGet=JSON.parse(JSON.stringify(results));        
+            res.status(200).send({
+                message: results,   
+            });
+        } catch(e) { 
+            console.error('e in shirts getmodels: ', e);
+            res.status(500).send({message: e});
+        }
+    } else {
+        try {
+            res.status(200).send({
+                message: tempDataForGet,
+            });
+        } catch(e) {
+            console.error('e in shirt_model getmodels: ', e);
+            res.status(500).send({message: e});
+        }
     }
-    return;
 }
 
 exports.updateModels = async (req, res, next) => {
@@ -33,8 +43,11 @@ exports.updateModels = async (req, res, next) => {
         res.status(200).send({
             message: result,   
         });
+        emptyData();
+        refreshData();
     } catch(e) { 
-        console.error('e: ', e);
+        console.error('e in shirts update: ', e);
+        res.status(500).send({message: e});
     }
     return;
 }
@@ -61,12 +74,12 @@ exports.addShirtModel = [
             }
             //Brand id has been found, proceed to add
             const cursorAdd = await client.db('inventory').collection('shirt_model').insertOne(req.body); //req.body.brand
-            const cursorFind = client.db('inventory').collection('shirt_model').find();
-            cursorFind.sort({"model":1});
-            const results = await cursorFind.toArray();
-            if(results.length)res.status(200).send({message: results});
+            res.status(200).send({message: cursorAdd});
+            emptyData();
+            refreshData();
         } catch(e) { 
             console.error('error adding shirt model: ', e);
+            res.status(500).send({message: e});
         }
         return;
       },
@@ -81,8 +94,11 @@ exports.deleteModel = async (req, res, next) => {
         cursorFind.sort({"model":1});
         const results = await cursorFind.toArray();
         if(results.length)res.status(200).send({message: results});
+        emptyData();
+        refreshData();
     } catch(e) { 
-        console.error('e: ', e);
+        console.error('e in shirts delete: ', e);
+        res.status(500).send({message: e});
     }
     return;
 }

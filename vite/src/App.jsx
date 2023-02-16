@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import './styles/styles.css';
 import homeIcon from './assets/house.png';
 import ShoesPage from './components/ShoesPage';
@@ -21,6 +21,8 @@ function App() {
     const [dataShirts, setDataShirts] = useState();
     const [dataCoats, setDataCoats] = useState();
     const [dataAccessories, setDataAccessories] = useState(); 
+
+    const navigate = useNavigate();
     
     useEffect(()=>{
         console.log('update on coats: ', dataCoats);
@@ -29,8 +31,8 @@ function App() {
 
     return (        
             <div className="mainPage">
-                <div className="menu">
-                    <button onClick={e=>console.log(dataBrands)}>All brands state</button>
+                <div className="menuWide">
+                    {/* <button onClick={e=>console.log(dataBrands)}>All brands state</button> */}
                     <Link to="/">
                         <img className='homeIcon' src={homeIcon}  alt="home" />
                     </Link>
@@ -48,8 +50,37 @@ function App() {
                     </Link>
                     <Link to="/brands">
                         <button className='menuButton' >Brands</button>
-                    </Link>     
+                    </Link>    
+                </div>
+                <div className="menuSmall">
+                    <Link to="/">
+                        <img className='homeIcon' src={homeIcon}  alt="home" />
+                    </Link>
+                    <select name="menuSmall" id="menuSmall" onChange={e=>navigate(e.target.children[e.target.selectedIndex].value)}>
+
+                        <option value="/shoes">
+                        Shoes
+                        </option>
+
+                        <option value="/shirts">
+                        Shirts
+                        </option>
+
+                        <option value="/coats">
+                        Coats
+                        </option>
+
+                        <option value="/accessories">
+                        Accessories
+                        </option>
+
+                        <option value="/brands">
+                        Brands
+                        </option>
+
+                    </select>                    
                     
+                       
                 </div>
                 <div className="display">
                     <Routes>           

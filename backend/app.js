@@ -7,22 +7,8 @@ require('dotenv').config();
 const backendRouter = require('./routes/backendRoutes');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { debuglog } = require('util');
-const mongoose = require('mongoose');
 
 var app = express();
-
-//Connection with mongoose
-// mongoose.set('strictQuery', false);
-// const mongodb = `mongodb+srv://myAtlasDBUser:Wonderboy1@myatlasclusteredu.nnrvhxq.mongodb.net/?retryWrites=true&w=majority`;
-// async function db_connect() {
-//     await mongoose.connect(mongodb);
-// }
-// db_connect().catch(e=> console.log('error: ', e));
-
-//Connection to mongoDB node driver
-// const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@myatlasclusteredu.nnrvhxq.mongodb.net/?retryWrites=true&w=majority`;
-// const client = new MongoClient(uri);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', backendRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

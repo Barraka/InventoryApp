@@ -209,6 +209,6 @@ exports.run = async (client) => {
         // ]);
 
     } catch(e) {
-        console.log('e: ', e);
+        console.error('e: ', e);
     }
 }

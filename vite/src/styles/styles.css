@@ -37,7 +37,7 @@ a {
 }
 .app {
     max-width: 1280px;
-    width: 1280px;
+    /* width: 1280px; */
     margin: 0 auto;
     text-align: center;
     overflow-y: auto;
@@ -102,13 +102,29 @@ button {
     gap: 16px;
     overflow-y: auto;
 }
-.menu {
+.menuWide {
     display: flex;
     justify-content: center;
     align-items:center;
     gap: 16px;
     background-color: var(--palette5);
     padding: 8px 0;
+}
+.menuSmall {
+    display: none;
+}
+@media (max-width: 750px) {
+    .menuWide {
+        display: none;
+    }
+    .menuSmall {
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        gap: 32px;
+        background-color: var(--palette5);
+        padding: 8px 0;
+    }
 }
 
 input, select, textarea {
@@ -157,7 +173,7 @@ input, select, textarea {
     padding: 32px 8px;
     border-radius: 10px;
     gap: 16px;
-    max-width: 1200px;    
+    /* max-width: 1200px;     */
 }
 .productCard {
     display: flex;
@@ -174,7 +190,7 @@ input, select, textarea {
     transition: background-color 0.3s ease-in;
     color: var(--textDark);
     box-shadow: 0px 5px 8px 2px var(--darkGray);
-    /* flex-basis: 250px; */
+    flex-basis: 250px;
     /* min-width: 250px; */
 }
 .productCard:hover {
@@ -227,7 +243,7 @@ input, select, textarea {
     border-radius: 10px;
     border: 3px solid var(--darkGray);
     background-color: var(--textLight);
-    width: 400px;
+    max-width: 400px;
 }
 .modelHeader {
     background-color: var(--palette5);
@@ -258,7 +274,7 @@ input, select, textarea {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    overflow: hidden;
 }
 .instanceImageWrapper img {
     width: 300px;
@@ -393,12 +409,19 @@ input, select, textarea {
 .editProductInner select, .editProductInner input {
     cursor: pointer;
 }
+@media (max-width: 750px) {
+    .fileChoose {
+        font-size: 0.8rem;
+    }
+}
+
 
 .editModel, .addProduct {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     top: 32px;
+    overflow-y: auto;
 }
 .editModelInner {
     background-color: white;

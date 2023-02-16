@@ -116,7 +116,7 @@ function EditProductHeader(props) {
                     </select></>}
 
                     <div className="productPicture">Producut Image:</div>
-                    <input ref={fileRef} type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
+                    <input ref={fileRef} className="fileChoose" type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
 
                     {props.forBrand ? null :
                     <><div className="productPrice">Price:</div>

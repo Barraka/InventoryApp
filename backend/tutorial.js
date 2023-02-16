@@ -7,18 +7,15 @@ const {client} = require('./connect');
 
 const listDB = async (client) => {
     dblist = await client.db().admin().listDatabases();
-    console.log('DBs:');
-    dblist.databases.forEach(db=> console.log(' - ', db.name));
 }
 
 const main = async( )=> {
     try {
-        console.log('client: ', client);
         await client.connect();
         await listDB(client);
         await client.close();
     } catch(e) {
-        console.log('e: ', e);
+        console.error('e: ', e);
     }
 }
 

@@ -116,7 +116,7 @@ function ProductAdd(props) {
 
                     {/* picture */}
                     <label htmlFor="image">Upload image (optional)</label>
-                    <input ref={fileRef} type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
+                    <input ref={fileRef} className="fileChoose" type="file" name="image" id="image"  onChange={(e) => getBase64(e.target.files[0])}/>
 
                     {/* price */}
                     {props.forBrand ? null :

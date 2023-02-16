@@ -2,24 +2,35 @@ const async = require("async");
 const { body, validationResult } = require("express-validator");
 const {client} = require('../connect');
 const ObjectId = require('mongodb').ObjectId;
+const {refreshData, emptyData} = require('./brandController');
+
+let tempDataForGet=undefined;
 
 exports.getModels = async (req, res, next) => {
-    try {
-        await client.connect();
-        const cursor = client.db('inventory').collection('coat_model').find();
-        cursor.sort({"model":1});
-        const results = await cursor.toArray();
-        //Get the brand names for each model
-        let brandCursor= client.db('inventory').collection('brands').find();
-        brandCursor = await brandCursor.toArray();
-        res.status(200).send({
-            message: results,   
-            brands:brandCursor,
-        });
-    } catch(e) { 
-        console.error('e: ', e);
+    if(!tempDataForGet) {
+        try {
+            await client.connect();
+            const cursor = client.db('inventory').collection('coat_model').find();
+            cursor.sort({"model":1});
+            const results = await cursor.toArray();
+            tempDataForGet=JSON.parse(JSON.stringify(results));         
+            res.status(200).send({
+                message: results,   
+            });
+        } catch(e) { 
+            console.error('e in coat_model getmodels: ', e);
+            res.status(500).send({message: e});
+        }
+    } else {
+        try {
+            res.status(200).send({
+                message: tempDataForGet,
+            });
+        } catch(e) {
+            console.error('e in coat_model getmodels: ', e);
+            res.status(500).send({message: e});
+        }
     }
-    return;
 }
 
 exports.updateModels = async (req, res, next) => {
@@ -32,8 +43,11 @@ exports.updateModels = async (req, res, next) => {
         res.status(200).send({
             message: result,   
         });
+        emptyData();
+        refreshData();
     } catch(e) { 
-        console.error('e: ', e);
+        console.error('e in coats update: ', e);
+        res.status(500).send({message: e});
     }
     return;
 }
@@ -60,12 +74,12 @@ exports.addCoatModel = [
             }
             //Brand id has been found, proceed to add
             const cursorAdd = await client.db('inventory').collection('coat_model').insertOne(req.body); //req.body.brand
-            const cursorFind = client.db('inventory').collection('coat_model').find();
-            cursorFind.sort({"model":1});
-            const results = await cursorFind.toArray();
-            if(results.length)res.status(200).send({message: results});
+            res.status(200).send({message: cursorAdd});
+            emptyData();
+            refreshData();
         } catch(e) { 
             console.error('error adding coat model: ', e);
+            res.status(500).send({message: e});
         }
         return;
       },
@@ -81,31 +95,11 @@ exports.deleteModel = async (req, res, next) => {
         cursorFind.sort({"model":1});
         const results = await cursorFind.toArray();
         if(results.length)res.status(200).send({message: results});
+        emptyData();
+        refreshData();
     } catch(e) { 
-        console.error('e: ', e);
+        console.error('e in coats delete: ', e);
+        res.status(500).send({message: e});
     }
     return;
 }
-
-// exports.cleanData = async (req, res, next) => {
-//     try {
-//         const tempval=[...req.body];
-//         await client.connect();
-//         tempval.forEach(async x=> {
-//             console.log('x coat: ', x);
-//             const id=x._id;
-//             delete x._id;
-//             delete x.description;
-//             x.price=113;
-//             x.sizes={'XS':2,'M':3,'L':2};
-//             const result = await client.db('inventory').collection('coat_model').replaceOne({_id:new ObjectId(id)}, x);
-//         });
-//         // const result = await client.db('inventory').collection('coat_model').replaceOne({_id:new ObjectId(id)}, tempval);
-//         res.status(200).send({
-//             message: result,   
-//         });
-//     } catch(e) { 
-//         console.error('e: ', e);
-//     }
-//     return;
-// }
