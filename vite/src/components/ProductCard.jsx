@@ -10,7 +10,7 @@ function ProductCard(props) {
             const tempval=props.target+props.data._id;
             setTarget(tempval);
         }
-    },[]);
+    },[]);;
 
     function redirect() {
         if(target)navigate(target);
