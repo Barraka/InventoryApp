@@ -100,7 +100,7 @@ function BrandsPage(props) {
 
                 <div className="models">
                     
-                    {props.dataBrands ? props.dataBrands.map((x,i)=><ProductCard forBrand={true} key={x._id || i} id={x._id} count={x.products.category1.length+x.products.category2.length+x.products.category3.length+x.products.category4.length} brands={props.brands} data={x} target={'/brands/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                    {props.dataBrands  ? props.dataBrands.map((x,i)=><ProductCard forBrand={true} key={x._id || i} id={x._id} count={x.products.category1?.length+x.products.category2?.length+x.products.category3?.length+x.products.category4?.length} brands={props.brands} data={x} target={'/brands/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
 
                 </div>            
             </div>

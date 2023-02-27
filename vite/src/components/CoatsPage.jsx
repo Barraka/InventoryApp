@@ -11,7 +11,7 @@ function CoatsPage(props) {
     const [productInstance, setProductInstance] = useState(null);
 
     useEffect(()=>{
-        if(props.dataShirts===undefined)getDataCoats(); 
+        if(props.dataCoats===undefined)getDataCoats(); 
         if(props.brands===undefined) {
             getDataBrands();
             getDataAllBrands(); 

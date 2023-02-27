@@ -124,8 +124,8 @@ function BrandInstance(props) {
                 tempval1[i].picture=o.picture;
             }
         }
-        props.setDataBrands(tempval2);
-        props.setBrands(tempval1);
+        // props.setDataBrands(tempval2);
+        // props.setBrands(tempval1);
         const targetPath = 'https://inventori.up.railway.app/brands/'+o._id;
         await axios.put(targetPath, o)
         .catch(e=> {
@@ -136,7 +136,7 @@ function BrandInstance(props) {
     }
 
     function displayHeader() {
-        setOutput(<EditProductHeader link={'/brands'} forBrand={true} deleteProduct={deleteProduct}  brands={props.brands} data={data} updateInfo={updateInfo} setOutput={setOutput}/>);
+        setOutput(<EditProductHeader setBrands={props.setBrands} setDataBrands={props.setDataBrands} link={'/brands'} forBrand={true} deleteProduct={deleteProduct}  brands={props.brands} data={data} updateInfo={updateInfo} setOutput={setOutput}/>);
     }
 
     async function deleteProduct() {

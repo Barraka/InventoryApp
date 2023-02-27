@@ -157,6 +157,7 @@ exports.updateBrand = async (req, res, next) => {
         res.status(200).send({
             message: result,   
         });
+        await refreshData();
     } catch(e) { 
         console.error('e in brands update: ', e);
         res.status(500).send({message: e});

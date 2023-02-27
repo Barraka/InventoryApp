@@ -84,6 +84,7 @@ function EditProductHeader(props) {
         else {
             const tempdata={...data};
             if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
+            else props.setBrands(undefined);
             props.updateInfo(tempdata);
             console.log('end of validate, tempdata: ', tempdata);
         }
