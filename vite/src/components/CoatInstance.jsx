@@ -97,7 +97,7 @@ function CoatInstance(props) {
         }
         setModelInfo({...o});
         props.setDataCoats(tempval);
-        const targetPath = 'http://localhost:3000/coat_models/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/coat_models/'+modelInfo._id;
         await axios.put(targetPath, o)
         .then(res=> {
             getDataAllBrands();
@@ -122,7 +122,7 @@ function CoatInstance(props) {
         navigate('/coats');
         const prev=modelInfo;
         props.setDataCoats(prev=>prev.filter(x=>x._id!==modelInfo._id));
-        const targetPath = 'http://localhost:3000/coats_models/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/coats_models/'+modelInfo._id;
         await axios.delete(targetPath, modelInfo._id)
         .then(res=> {
             getDataAllBrands();

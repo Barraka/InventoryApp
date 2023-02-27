@@ -28,60 +28,64 @@ function App() {
         console.log('update on coats: ', dataCoats);
     },[dataCoats]);
 
+    function showActiveMenu(e) {
+        const allButtons=document.querySelectorAll('.menuButton');
+        allButtons.forEach(x=>x.classList.remove('buttonActive')); 
+        e.target.classList.add('buttonActive');
+    }
+
 
     return (        
             <div className="mainPage">
-                <div className="menuWide">
-                    {/* <button onClick={e=>console.log(dataBrands)}>All brands state</button> */}
-                    <Link to="/">
-                        <img className='homeIcon' src={homeIcon}  alt="home" />
-                    </Link>
-                    <Link to="/shoes">
-                        <button className='menuButton' >Shoes</button>
-                    </Link>
-                    <Link to="/shirts">
-                        <button className='menuButton' >Shirts</button>
-                    </Link>
-                    <Link to="/coats">
-                        <button className='menuButton' >Coats</button>
-                    </Link>
-                    <Link to="/accessories">
-                        <button className='menuButton' >Accessories</button>
-                    </Link>
-                    <Link to="/brands">
-                        <button className='menuButton' >Brands</button>
-                    </Link>    
+                <div className="navbar">
+                    <div className="menuWide">
+                        {/* <button onClick={e=>console.log(dataBrands)}>All brands state</button> */}
+                        <Link to="/">
+                            <img className='homeIcon' src={homeIcon}  alt="home" />
+                        </Link>
+                        <Link to="/shoes">
+                            <button className='menuButton' onClick={showActiveMenu}>Shoes</button>
+                        </Link>
+                        <Link to="/shirts">
+                            <button className='menuButton' onClick={showActiveMenu} >Shirts</button>
+                        </Link>
+                        <Link to="/coats">
+                            <button className='menuButton' onClick={showActiveMenu} >Coats</button>
+                        </Link>
+                        <Link to="/accessories">
+                            <button className='menuButton' onClick={showActiveMenu} >Accessories</button>
+                        </Link>
+                        <Link to="/brands">
+                            <button className='menuButton' onClick={showActiveMenu} >Brands</button>
+                        </Link>    
+                    </div>
+
+                    <div className="menuSmall">
+                        <Link to="/">
+                            <img className='homeIcon' src={homeIcon}  alt="home" />
+                        </Link>
+
+                        <div className="menuWrapper">
+                            <Link to="/shoes">
+                                <button className='menuButton' onClick={showActiveMenu} >Shoes</button>
+                            </Link>
+                            <Link to="/shirts">
+                                <button className='menuButton' onClick={showActiveMenu} >Shirts</button>
+                            </Link>
+                            <Link to="/coats">
+                                <button className='menuButton' onClick={showActiveMenu} >Coats</button>
+                            </Link>
+                            <Link to="/accessories">
+                                <button className='menuButton' onClick={showActiveMenu} >Accessories</button>
+                            </Link>
+                            <Link to="/brands">
+                                <button className='menuButton' onClick={showActiveMenu} >Brands</button>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-                <div className="menuSmall">
-                    <Link to="/">
-                        <img className='homeIcon' src={homeIcon}  alt="home" />
-                    </Link>
-                    <select name="menuSmall" id="menuSmall" onChange={e=>navigate(e.target.children[e.target.selectedIndex].value)}>
+                
 
-                        <option value="/shoes">
-                        Shoes
-                        </option>
-
-                        <option value="/shirts">
-                        Shirts
-                        </option>
-
-                        <option value="/coats">
-                        Coats
-                        </option>
-
-                        <option value="/accessories">
-                        Accessories
-                        </option>
-
-                        <option value="/brands">
-                        Brands
-                        </option>
-
-                    </select>                    
-                    
-                       
-                </div>
                 <div className="display">
                     <Routes>           
                         <Route path="/" element={<Home />} />             

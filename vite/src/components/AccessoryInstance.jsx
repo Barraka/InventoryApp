@@ -90,7 +90,7 @@ function AccessoryInstance(props) {
         }
         setModelInfo({...o});
         props.setDataAccessories(tempval);
-        const targetPath = 'http://localhost:3000/accessory/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/accessory/'+modelInfo._id;
         await axios.put(targetPath, o)
         .then(res=> {
             getDataAllBrands();
@@ -113,7 +113,7 @@ function AccessoryInstance(props) {
         navigate('/accessories');
         const prev=modelInfo;
         props.setDataAccessories(prev=>prev.filter(x=>x._id!==modelInfo._id));
-        const targetPath = 'http://localhost:3000/accessory/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/accessory/'+modelInfo._id;
         await axios.delete(targetPath, modelInfo._id)
         .then(res=> {
             getDataAllBrands();

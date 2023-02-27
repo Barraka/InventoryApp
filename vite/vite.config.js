@@ -6,13 +6,6 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/test': {
-        target: "http://localhost:3000/test",
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/test/, ''),
-      }
-    }
+
   },
 })

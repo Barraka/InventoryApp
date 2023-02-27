@@ -78,6 +78,7 @@ function ProductAdd(props) {
             priceRef.current.reportValidity();
         }   
         else {
+            
             //set default brand id            
             let tempdata={...data};
             if(!props.forBrand && tempdata.brand==='') {
@@ -87,6 +88,9 @@ function ProductAdd(props) {
                 tempdata.brandName=brandChosen;
             }
             if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
+            //Default picture
+            // if(!tempdata.picture || tempdata.picture===placeholderImage)tempdata.picture=getBase64(placeholderImage);
+            console.log('about to send product: ', tempdata);
             props.sendData(tempdata);
         }        
     }
@@ -94,6 +98,7 @@ function ProductAdd(props) {
     return (
         <div className="addProduct">
             <div className="backdrop"></div>
+            <div className="addProductBodyWrapper">
             <div className="addProductBody">
                 <div className="addProductTitle">Add item:</div>
                 <form className='form' method='post'>
@@ -103,7 +108,7 @@ function ProductAdd(props) {
                     <br/>
 
                     {/* brand dropdown*/}
-                    {props.forBrand ? null :
+                    {props.forBrand ? null : props.brands ?
                     <><label htmlFor="brand">Brand:</label>
                     <select ref={brandRef} name="brand" id="brand" onChange={dropdownChange}>
                         {brands.sort((a,b)=> {
@@ -112,7 +117,7 @@ function ProductAdd(props) {
                             if(nameA<nameB)return -1;
                             else return 1;   
                         }).map(x=><option key={x._id} data-id={x._id}>{x.name}</option>)}
-                    </select></>}
+                    </select></> : null}
 
                     {/* picture */}
                     <label htmlFor="image">Upload image (optional)</label>
@@ -130,6 +135,8 @@ function ProductAdd(props) {
                     </div>
                 </form>                
             </div>
+            </div>
+            
         </div>
     )
 }

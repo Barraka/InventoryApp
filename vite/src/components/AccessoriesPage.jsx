@@ -24,30 +24,6 @@ function AccessoriesPage(props) {
     useEffect(()=>{
     },[props.brands, props.dataAccessories]);
 
-    // async function getModelsAndBrands() {
-    //     let modelsArray =[];
-    //     await axios.get('http://localhost:3000/accessories')
-    //         .then(res=>  {
-    //             let allModels= res.data.message;
-    //             const allBrands=res.data.brands;
-    //             props.setBrands(allBrands);                
-    //             allModels.forEach(x=> {
-    //                 //Get the brand Name from the stores _id
-    //                 allBrands.forEach(brand=> {
-    //                     if(x.brand===brand._id) {
-    //                         x.brandName = brand.name;
-    //                         modelsArray.push(x);
-    //                     }                    
-    //                 });
-    //                 //Display a placeholder image if none is provided
-    //                 if(!x.picture)x.picture=placeholderImage;
-    //             });                
-    //             props.setDataAccessories([...modelsArray]);
-    //         })
-    //         .catch(console.error);
-    //     return modelsArray;
-    // }
-
     async function getDataShoes() {
         console.log('making a request for shoes');
         await getShoes();
@@ -97,7 +73,7 @@ function AccessoriesPage(props) {
         const prevBrandData2 = JSON.parse(JSON.stringify(prevBrandData));
         prevBrandData.filter(x=>x._id===o.brand)[0].products.category4.push(o);
         props.setDataBrands(prevBrandData);
-        axios.post('http://localhost:3000/add_accessory', o)
+        axios.post('https://inventori.up.railway.app/add_accessory', o)
         .then(res=>  {
             o._id=res.data.message.insertedId;
             prevBrandData2.filter(x=>x._id===o.brand)[0].products.category4.push(o);

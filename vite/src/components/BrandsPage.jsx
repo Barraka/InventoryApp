@@ -72,7 +72,7 @@ function BrandsPage(props) {
         const prevData=[...props.brands];
         props.setBrands([...prevData, o]); 
         props.setDataBrands([...prevDataBrands, {...o, count:0, products:{}}]);
-        axios.post('http://localhost:3000/brands', o)
+        axios.post('https://inventori.up.railway.app/brands', o)
         .then(res=>{
             const result=res.data.message;
             props.setBrands(result);
@@ -100,7 +100,7 @@ function BrandsPage(props) {
 
                 <div className="models">
                     
-                    {props.dataBrands ? props.dataBrands.map((x,i)=><ProductCard nosize={true} key={x._id || i} id={x._id} count={x.products.category1.length+x.products.category2.length+x.products.category3.length+x.products.category4.length} brands={props.brands} data={x} target={'/brands/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
+                    {props.dataBrands ? props.dataBrands.map((x,i)=><ProductCard forBrand={true} key={x._id || i} id={x._id} count={x.products.category1.length+x.products.category2.length+x.products.category3.length+x.products.category4.length} brands={props.brands} data={x} target={'/brands/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
 
                 </div>            
             </div>

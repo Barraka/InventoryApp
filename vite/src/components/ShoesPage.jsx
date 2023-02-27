@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import placeholderImage from '../assets/empty.jpg';
 import ProductCard from './ProductCard';
 import loading from '../assets/loading.gif';
 import ProductAdd from './ProductAdd';
@@ -72,7 +71,7 @@ function ShoesPage(props) {
         const prevBrandData2 = JSON.parse(JSON.stringify(prevBrandData));
         prevBrandData.filter(x=>x._id===o.brand)[0].products.category1.push(o);
         props.setDataBrands(prevBrandData);
-        axios.post('http://localhost:3000/add_shoe_model', o)
+        axios.post('https://inventori.up.railway.app/add_shoe_model', o)
         .then(res=>  {
             o._id=res.data.message.insertedId;
             prevBrandData2.filter(x=>x._id===o.brand)[0].products.category1.push(o);

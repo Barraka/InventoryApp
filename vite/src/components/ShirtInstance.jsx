@@ -105,7 +105,7 @@ function ShirtInstance(props) {
         }
         setModelInfo({...o});
         props.setDataShirts(tempval);
-        const targetPath = 'http://localhost:3000/shirt_models/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/shirt_models/'+modelInfo._id;
         await axios.put(targetPath, o)
         .then(res=> {
             getDataAllBrands();
@@ -130,7 +130,7 @@ function ShirtInstance(props) {
         navigate('/shirts');
         const prev=modelInfo;
         props.setDataShirts(prev=>prev.filter(x=>x._id!==modelInfo._id));
-        const targetPath = 'http://localhost:3000/shirt_models/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/shirt_models/'+modelInfo._id;
         await axios.delete(targetPath, modelInfo._id)
         .then(res=> {
             getDataAllBrands();

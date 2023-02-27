@@ -24,30 +24,6 @@ function CoatsPage(props) {
     useEffect(()=>{
     },[props.brands, props.dataCoats]);
 
-    // async function getModelsAndBrands() {
-    //     let modelsArray =[];
-    //     await axios.get('http://localhost:3000/coats_models')
-    //         .then(res=>  {
-    //             let allModels= res.data.message;
-    //             const allBrands=res.data.brands;
-    //             props.setBrands(allBrands);
-    //             allModels.forEach(x=> {
-    //                 //Get the brand Name from the stores _id
-    //                 allBrands.forEach(brand=> {
-    //                     if(x.brand===brand._id) {
-    //                         x.brandName = brand.name;
-    //                         modelsArray.push(x);
-    //                     }                    
-    //                 });
-    //                 //Display a placeholder image if none is provided
-    //                 if(!x.picture)x.picture=placeholderImage;
-    //             });                
-    //             props.setDataCoats(modelsArray);
-    //         })
-    //         .catch(console.error);
-    //     return modelsArray;
-    // }
-
     async function getDataShoes() {
         console.log('making a request for shoes');
         await getShoes();
@@ -101,7 +77,7 @@ function CoatsPage(props) {
         prevBrandData.filter(x=>x._id===o.brand)[0].products.category3.push(o);
         props.setDataBrands(prevBrandData);
 
-        axios.post('http://localhost:3000/add_coat_model', o)
+        axios.post('https://inventori.up.railway.app/add_coat_model', o)
         .then(res=>  {
             // console.log('prevBrandData2 before push: ', prevBrandData2[2].products.category3);
             o._id=res.data.message.insertedId;

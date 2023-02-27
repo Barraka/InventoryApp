@@ -96,7 +96,7 @@ function ShoeInstance(props) {
         setModelInfo({...o});
         props.setDataShoes(tempval);
         console.log('updated dataShoes: ',tempval);
-        const targetPath = 'http://localhost:3000/shoe_models/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/shoe_models/'+modelInfo._id;
         await axios.put(targetPath, o)
         .then(res=> {
             // getDataAllBrands();
@@ -122,7 +122,7 @@ function ShoeInstance(props) {
         navigate('/shoes');
         const prev=modelInfo;
         props.setDataShoes(prev=>prev.filter(x=>x._id!==modelInfo._id));
-        const targetPath = 'http://localhost:3000/shoe_models/'+modelInfo._id;
+        const targetPath = 'https://inventori.up.railway.app/shoe_models/'+modelInfo._id;
         await axios.delete(targetPath, modelInfo._id)
         .then(res=> {
             getDataAllBrands();

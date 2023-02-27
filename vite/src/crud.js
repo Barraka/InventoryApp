@@ -8,7 +8,7 @@ let outputCoats=undefined;
 let outputAccessories=undefined;
 
 async function getAllBrands() {
-    await axios.get('http://localhost:3000/brands')
+    await axios.get('https://inventori.up.railway.app/brands')
         .then(res=>  {
             const data=res.data.message;
             const justBrands = res.data.justBrands;
@@ -19,7 +19,7 @@ async function getAllBrands() {
 }
 
 async function getJustBrands() {
-    await axios.get('http://localhost:3000/justBrands')
+    await axios.get('https://inventori.up.railway.app/justBrands')
         .then(res=>  {
             const data=res.data.message;
             outputJustBrands=data;        
@@ -29,7 +29,7 @@ async function getJustBrands() {
 
 async function getShirts() {
     let modelsArray =[];
-    await axios.get('http://localhost:3000/shirts_models')
+    await axios.get('https://inventori.up.railway.app/shirts_models')
         .then(res=>  {
             const  result= res.data.message;   
             outputShirts=result;                        
@@ -40,7 +40,7 @@ async function getShirts() {
 
 async function getShoes() {
     let modelsArray =[];
-    await axios.get('http://localhost:3000/shoe_models')
+    await axios.get('https://inventori.up.railway.app/shoe_models')
         .then(res=>  {
             const  result= res.data.message;   
             outputShoes=result;                        
@@ -51,7 +51,7 @@ async function getShoes() {
 
 async function getCoats() {
     let modelsArray =[];
-    await axios.get('http://localhost:3000/coats_models')
+    await axios.get('https://inventori.up.railway.app/coats_models')
         .then(res=>  {
             const  result= res.data.message;   
             outputCoats=result;                        
@@ -62,7 +62,7 @@ async function getCoats() {
 
 async function getAccessories() {
     let modelsArray =[];
-    await axios.get('http://localhost:3000/accessories')
+    await axios.get('https://inventori.up.railway.app/accessories')
         .then(res=>  {
             const  result= res.data.message;   
             outputAccessories=result;                        

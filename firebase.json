@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "/vite/dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

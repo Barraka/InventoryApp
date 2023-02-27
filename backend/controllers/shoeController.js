@@ -60,6 +60,7 @@ exports.updateModels = async (req, res, next) => {
         });
         emptyData();
         refreshData();
+        tempDataForGet=undefined;
     } catch(e) { 
         console.error('e in shoes update: ', e);
         res.status(500).send({message: e});
@@ -80,6 +81,7 @@ exports.deleteModel = async (req, res, next) => {
         if(results.length)res.status(200).send({message: results});
         emptyData();
         refreshData();
+        tempDataForGet=undefined;
     } catch(e) { 
         console.error('e in shoes delete: ', e);
         res.status(500).send({message: e});
@@ -112,6 +114,7 @@ exports.addShoeModel = [
             res.status(200).send({message: cursorAdd});
             emptyData();
             refreshData();
+            tempDataForGet=undefined;
         } catch(e) { 
             console.error('error adding shoe model: ', e);
         }
