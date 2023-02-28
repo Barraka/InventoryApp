@@ -144,7 +144,6 @@ function BrandInstance(props) {
     async function deleteProduct(pw) {
         if(data.count) {         
             setOutput(null);   
-            console.log('cannot delete');
             setWarning(<div className='warningWrapper'>
                 <div className='backdrop'></div>
                 <div className="warning">
@@ -168,7 +167,7 @@ function BrandInstance(props) {
                 getDataAllBrands();                
             })
             .catch(e=> {
-                console.error('Error deleting product: ', e);
+                console.error('Error deleting brand: ', e);
                 props.setDataBrands(prevDataBrands);
                 props.setBrands(prevBrands);
                 props.setPassword(<WrongPassword setPassword={props.setPassword}/>);

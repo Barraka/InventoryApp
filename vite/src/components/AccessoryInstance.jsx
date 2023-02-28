@@ -119,6 +119,7 @@ function AccessoryInstance(props) {
         const targetPath = 'https://inventori.up.railway.app/accessory/'+modelInfo._id;
         await axios.delete(targetPath, {data: {pw: pw}})
         .then(res=> {
+            props.setDataBrands(undefined);
             getDataAllBrands();
         })
         .catch(e=> {

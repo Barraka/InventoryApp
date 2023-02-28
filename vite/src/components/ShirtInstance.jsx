@@ -136,6 +136,7 @@ function ShirtInstance(props) {
         const targetPath = 'https://inventori.up.railway.app/shirt_models/'+modelInfo._id;
         await axios.delete(targetPath, {data: {pw: pw}})
         .then(res=> {
+            props.setDataBrands(undefined);
             getDataAllBrands();
         })
         .catch(e=> {
