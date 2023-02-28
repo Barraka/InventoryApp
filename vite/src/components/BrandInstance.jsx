@@ -127,6 +127,7 @@ function BrandInstance(props) {
         props.setDataBrands(tempval1);
         props.setBrands(tempval2);
         const targetPath = 'https://inventori.up.railway.app/brands/'+o._id;
+        // const targetPath = 'http://localhost:3000/brands/'+o._id;
         await axios.put(targetPath, o)
         .catch(e=> {
             console.error('Error updating info: ', e);
@@ -158,8 +159,8 @@ function BrandInstance(props) {
 
             props.setDataBrands(prev=>prev.filter(x=>x._id!==data._id));
             props.setBrands(prev=>prev.filter(x=>x._id!==data._id));
-            const targetPath = 'http://localhost:3000/brands/'+data._id;
-            // const targetPath = 'https://inventori.up.railway.app/brands/'+data._id;
+            // const targetPath = 'http://localhost:3000/brands/'+data._id;
+            const targetPath = 'https://inventori.up.railway.app/brands/'+data._id;
             await axios.delete(targetPath, data._id)
             .then(res=> {
                 console.log('res after delete: ',res.data.message);

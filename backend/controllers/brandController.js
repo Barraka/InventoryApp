@@ -187,6 +187,8 @@ exports.addBrand = [
             cursorFind.sort({"model":1});
             const results = await cursorFind.toArray();
             if(results.length)res.status(200).send({message: results});
+            tempDataForGet=undefined;
+            tempJustBrands=undefined;
         } catch(e) { 
             console.error('error adding Brand: ', e);
             res.status(500).send({message: e});
@@ -199,9 +201,9 @@ exports.addBrand = [
 
 exports.deleteBrand = async (req, res, next) => {
     const id=req.originalUrl.split('/')[2]
-    // const sum= await getsum(id);
-    if(false) {
-    // if(sum.sum>0) {
+    const sum= await getsum(id);
+
+    if(sum.sum>0) {
         res.status(500).send({message: "There are products attached to the brand. Unable to complete deletion."});
     } else {
         try {
@@ -212,7 +214,8 @@ exports.deleteBrand = async (req, res, next) => {
             cursorFind.sort({"name":1});
             const results = await cursorFind.toArray();
             if(results.length)res.status(200).send({message: results});
-            tempJustBrands=JSON.parse(JSON.stringify(results)); 
+            tempDataForGet=undefined;
+            tempJustBrands=undefined; 
         } catch(e) { 
             console.error('e in brands delete: ', e);
             res.status(500).send({message: 'could not delete', e});

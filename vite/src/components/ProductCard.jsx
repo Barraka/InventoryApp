@@ -25,7 +25,7 @@ function ProductCard(props) {
                 <img src={props.data.picture ? props.data.picture : placeholderImage} alt="picture" />
             </div>
             {props.data.price ? <div className="priceWrapper">{props.data.price.toFixed(2)} €</div> : null}
-            {props.nosize ?  <div className="inStock">In stock: {props.data.quantity}</div> : props.forBrand ? <div className="inStock">Products: {props.count}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
+            {props.nosize ?  <div className="inStock">In stock: {props.data.quantity}</div> : props.forBrand ? <div className="inStock">Products: {props.count ? props.count : 0}</div> : <div className="inStock">In stock: {Object.entries(props.data.sizes).reduce((a,b)=>a+parseInt(b[1]),0)}</div>}            
         </div>
     )
 }

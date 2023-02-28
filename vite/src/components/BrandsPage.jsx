@@ -73,11 +73,13 @@ function BrandsPage(props) {
         const prevData=[...props.brands];
         props.setBrands([...prevData, o]); 
         props.setDataBrands([...prevDataBrands, {...o, count:0, products:{}}]);
+        // axios.post('http://localhost:3000/brands', o)
         axios.post('https://inventori.up.railway.app/brands', o)
         .then(res=>{
             const result=res.data.message;
             props.setBrands(result);
-            getDataBrands();
+            // getDataBrands();
+            getDataAllBrands();
         })     
         .catch(e=>{
             console.error('error: ', e);

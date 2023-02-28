@@ -8,6 +8,7 @@ let outputCoats=undefined;
 let outputAccessories=undefined;
 
 async function getAllBrands() {
+    // await axios.get('http://localhost:3000/brands')
     await axios.get('https://inventori.up.railway.app/brands')
         .then(res=>  {
             const data=res.data.message;
@@ -19,6 +20,7 @@ async function getAllBrands() {
 }
 
 async function getJustBrands() {
+    // await axios.get('http://localhost:3000/justBrands')
     await axios.get('https://inventori.up.railway.app/justBrands')
         .then(res=>  {
             const data=res.data.message;
