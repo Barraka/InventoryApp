@@ -7,6 +7,11 @@ require('dotenv').config();
 const backendRouter = require('./routes/backendRoutes');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { debuglog } = require('util');
+const corsOptions = {
+    origin:'*', 
+    credentials:true,
+    optionsSuccessStatus:200
+}
 
 var app = express();
 
@@ -14,7 +19,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 app.use(cookieParser());
