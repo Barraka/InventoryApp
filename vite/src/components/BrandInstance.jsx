@@ -4,6 +4,7 @@ import EditProductHeader from './EditProductHeader';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import placeholderImage from '../assets/empty.jpg';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
+import WrongPassword from './WrongPassword';
 
 
 function BrandInstance(props) {
@@ -140,7 +141,7 @@ function BrandInstance(props) {
         setOutput(<EditProductHeader setBrands={props.setBrands} setDataBrands={props.setDataBrands} link={'/brands'} forBrand={true} deleteProduct={deleteProduct}  brands={props.brands} data={data} updateInfo={updateInfo} setOutput={setOutput}/>);
     }
 
-    async function deleteProduct() {
+    async function deleteProduct(pw) {
         if(data.count) {         
             setOutput(null);   
             console.log('cannot delete');
@@ -156,20 +157,21 @@ function BrandInstance(props) {
             </div>);
         } else {
             navigate('/brands');
-
+            const prevDataBrands=JSON.parse(JSON.stringify(props.dataBrands));
+            const prevBrands=JSON.parse(JSON.stringify(props.brands));
             props.setDataBrands(prev=>prev.filter(x=>x._id!==data._id));
             props.setBrands(prev=>prev.filter(x=>x._id!==data._id));
             // const targetPath = 'http://localhost:3000/brands/'+data._id;
             const targetPath = 'https://inventori.up.railway.app/brands/'+data._id;
-            await axios.delete(targetPath, data._id)
+            await axios.delete(targetPath, {data: {pw: pw}})
             .then(res=> {
-                console.log('res after delete: ',res.data.message);
-                getDataAllBrands();
-                
+                getDataAllBrands();                
             })
             .catch(e=> {
                 console.error('Error deleting product: ', e);
-                // props.setDataBrands(prev);
+                props.setDataBrands(prevDataBrands);
+                props.setBrands(prevBrands);
+                props.setPassword(<WrongPassword setPassword={props.setPassword}/>);
             });
             
         }

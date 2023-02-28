@@ -11,6 +11,7 @@ const corsOptions = {
     optionsSuccessStatus:200
 }
 
+//
 //Brands
 router.get('/brands', cors(corsOptions), brandController.getBrands);
 router.get('/justBrands', cors(corsOptions), brandController.justBrands);

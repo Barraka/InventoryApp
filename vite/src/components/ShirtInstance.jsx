@@ -7,6 +7,7 @@ import AddSizeShirt from './AddSizeShirt';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import placeholderImage from '../assets/empty.jpg';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
+import WrongPassword from './WrongPassword';
 
 function ShirtInstance(props) {
     const [output, setOutput] = useState();
@@ -128,18 +129,19 @@ function ShirtInstance(props) {
         setOutput(<EditProductHeader link={'/shirts'} deleteProduct={deleteProduct}  brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
     }
 
-    async function deleteProduct() {
+    async function deleteProduct(pw) {
         navigate('/shirts');
-        const prev=modelInfo;
+        const prev=JSON.parse(JSON.stringify(props.dataShirts));
         props.setDataShirts(prev=>prev.filter(x=>x._id!==modelInfo._id));
         const targetPath = 'https://inventori.up.railway.app/shirt_models/'+modelInfo._id;
-        await axios.delete(targetPath, modelInfo._id)
+        await axios.delete(targetPath, {data: {pw: pw}})
         .then(res=> {
             getDataAllBrands();
         })
         .catch(e=> {
             console.error('Error deleting product: ', e);
             props.setDataShoes(prev);
+            props.setPassword(<WrongPassword setPassword={props.setPassword}/>);
         })
     }
 

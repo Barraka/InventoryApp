@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import placeholderImage from '../assets/empty.jpg';
 import axios from 'axios';
 import ProductCard from './ProductCard';
 import loading from '../assets/loading.gif';
 import ProductAdd from './ProductAdd';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
+
 function CoatsPage(props) {
     const [addModel, setAddModel] = useState(null);
     const [productInstance, setProductInstance] = useState(null);
+    
 
     useEffect(()=>{
         if(props.dataCoats===undefined)getDataCoats(); 
@@ -101,6 +102,7 @@ function CoatsPage(props) {
         <div className="productPage">
             {addModel}
             {productInstance}
+
             <div className="modelsWrapper">
                 <div className="intro">
                     <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} sendData={sendData} refresh={refresh} brands={props.brands} />)}> {addIcon}<span>Add Coat Model</span> </button>               

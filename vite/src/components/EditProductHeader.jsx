@@ -90,8 +90,8 @@ function EditProductHeader(props) {
         }
     }   
 
-    function beforeDeletion() {
-        props.deleteProduct();
+    function beforeDeletion(pw) {
+        props.deleteProduct(pw);
     }
     
 

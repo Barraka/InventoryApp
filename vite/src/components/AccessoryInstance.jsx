@@ -5,6 +5,7 @@ import EditProductHeader from './EditProductHeader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import placeholderImage from '../assets/empty.jpg';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
+import WrongPassword from './WrongPassword';
 
 function AccessoryInstance(props) {
     const [output, setOutput] = useState();
@@ -111,18 +112,19 @@ function AccessoryInstance(props) {
         setOutput(<EditProductHeader link={'/accessories'} deleteProduct={deleteProduct} brands={props.brands} data={modelInfo} updateInfo={updateInfo} setOutput={setOutput}/>);
     }
 
-    async function deleteProduct() {
+    async function deleteProduct(pw) {
         navigate('/accessories');
-        const prev=modelInfo;
+        const prev=JSON.parse(JSON.stringify(props.dataAccessories));
         props.setDataAccessories(prev=>prev.filter(x=>x._id!==modelInfo._id));
         const targetPath = 'https://inventori.up.railway.app/accessory/'+modelInfo._id;
-        await axios.delete(targetPath, modelInfo._id)
+        await axios.delete(targetPath, {data: {pw: pw}})
         .then(res=> {
             getDataAllBrands();
         })
         .catch(e=> {
             console.error('Error deleting product: ', e);
             props.setDataAccessories(prev);
+            props.setPassword(<WrongPassword setPassword={props.setPassword}/>);
         }); 
     }
 

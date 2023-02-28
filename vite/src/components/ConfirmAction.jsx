@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 function ConfirmAction(props) {
-
+    const inputRef=useRef(null);
 
     return (
         <div className='confirmActionWrapper'>
@@ -9,10 +9,11 @@ function ConfirmAction(props) {
             <div className="confirmAction">
                 <div className="confirmActionText">
                     You are about to delete this item. <br />
-                    Are you sure?
+                    Enter password:
                 </div>
+                <input ref={inputRef} type="password" />
                 <button onClick={e=>props.useConfirm(null)} className="editButton">Cancel</button>
-                <button onClick={e=>props.beforeDeletion()} className="editButton">Proceed</button>
+                <button onClick={e=>props.beforeDeletion(inputRef.current.value)} className="editButton">Proceed</button>
             </div>
 
         </div>

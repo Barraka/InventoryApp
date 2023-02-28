@@ -21,6 +21,7 @@ function App() {
     const [dataShirts, setDataShirts] = useState();
     const [dataCoats, setDataCoats] = useState();
     const [dataAccessories, setDataAccessories] = useState(); 
+    const [password, setPassword] = useState(null);
 
     const navigate = useNavigate();
     
@@ -87,6 +88,7 @@ function App() {
                 
 
                 <div className="display">
+                    {password}
                     <Routes>           
                         <Route path="/" element={<Home />} />             
                         <Route path="/shoes" element={<ShoesPage setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories}/>} />                            
@@ -96,7 +98,7 @@ function App() {
                         <Route path="/shirts/:id" element={<ShirtInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
 
                         <Route path="/coats" element={<CoatsPage  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
-                        <Route path="/coats/:id" element={<CoatInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />}  />
+                        <Route path="/coats/:id" element={<CoatInstance setPassword={setPassword}  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />}  />
 
                         <Route path="/accessories" element={<AccessoriesPage  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />
                         <Route path="/accessories/:id" element={<AccessoryInstance  setDataBrands={setDataBrands} dataBrands={dataBrands}  brands={brands} setBrands={setBrands} dataShoes={dataShoes} setDataShoes={setDataShoes} dataShirts={dataShirts} setDataShirts={setDataShirts} dataCoats={dataCoats} setDataCoats={setDataCoats} dataAccessories={dataAccessories} setDataAccessories={setDataAccessories} />} />

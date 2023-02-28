@@ -207,15 +207,20 @@ exports.deleteBrand = async (req, res, next) => {
         res.status(500).send({message: "There are products attached to the brand. Unable to complete deletion."});
     } else {
         try {
-        
-            await client.connect();
-            const result = await client.db('inventory').collection('brands').deleteOne({_id:new ObjectId(id)});
-            const cursorFind = client.db('inventory').collection('brands').find();
-            cursorFind.sort({"name":1});
-            const results = await cursorFind.toArray();
-            if(results.length)res.status(200).send({message: results});
-            tempDataForGet=undefined;
-            tempJustBrands=undefined; 
+            const result=req.body.pw;
+            if(result==='arsenal') {
+                await client.connect();
+                const result = await client.db('inventory').collection('brands').deleteOne({_id:new ObjectId(id)});
+                const cursorFind = client.db('inventory').collection('brands').find();
+                cursorFind.sort({"name":1});
+                const results = await cursorFind.toArray();
+                if(results.length)res.status(200).send({message: results});
+                tempDataForGet=undefined;
+                tempJustBrands=undefined;
+            } else {
+                res.status(500).send({message: 'Wrong password'});
+            }
+             
         } catch(e) { 
             console.error('e in brands delete: ', e);
             res.status(500).send({message: 'could not delete', e});

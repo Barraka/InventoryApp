@@ -1,4 +1,5 @@
 const async = require("async");
+const { json } = require("body-parser");
 const { body, validationResult } = require("express-validator");
 const {client} = require('../connect');
 const ObjectId = require('mongodb').ObjectId;
@@ -90,16 +91,21 @@ exports.addCoatModel = [
 exports.deleteModel = async (req, res, next) => {
     try {
         const id=req.originalUrl.split('/')[2]
-        const tempval={...req.body};
-        await client.connect();
-        const result = await client.db('inventory').collection('coat_model').deleteOne({_id:new ObjectId(id)});
-        const cursorFind = client.db('inventory').collection('coat_model').find();
-        cursorFind.sort({"model":1});
-        const results = await cursorFind.toArray();
-        if(results.length)res.status(200).send({message: results});
-        emptyData();
-        refreshData();
-        tempDataForGet=undefined;
+        const result=req.body.pw;
+        if(result==='arsenal') {
+            await client.connect();
+            const result = await client.db('inventory').collection('coat_model').deleteOne({_id:new ObjectId(id)});
+            const cursorFind = client.db('inventory').collection('coat_model').find();
+            cursorFind.sort({"model":1});
+            const results = await cursorFind.toArray();
+            if(results.length)res.status(200).send({message: results});
+            emptyData();
+            refreshData();
+            tempDataForGet=undefined;
+        } else {
+            res.status(500).send({message: 'Wrong password'});
+        }        
+        
     } catch(e) { 
         console.error('e in coats delete: ', e);
         res.status(500).send({message: e});
