@@ -42,7 +42,6 @@ function AddSizeShoe(props) {
             const tempval={...props.modelInfo};
             //Remove sizes that are of quantity 0
             for(let x in tempval.sizes) {
-                console.log('x: ', x);
                 if(tempval.sizes[x]==='0') {
                     delete tempval.sizes[x];
                 }

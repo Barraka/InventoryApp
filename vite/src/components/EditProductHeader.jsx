@@ -18,8 +18,7 @@ function EditProductHeader(props) {
     },[]);
 
     useEffect(()=>{
-        console.log('data: ', props.data);
-        console.log('name: ', props.data.name);
+
     },[props.data]);
     
     function getBase64(file) {
@@ -86,7 +85,6 @@ function EditProductHeader(props) {
             if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
             else props.setBrands(undefined);
             props.updateInfo(tempdata);
-            console.log('end of validate, tempdata: ', tempdata);
         }
     }   
 

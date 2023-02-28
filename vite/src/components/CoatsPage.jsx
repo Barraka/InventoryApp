@@ -26,41 +26,34 @@ function CoatsPage(props) {
     },[props.brands, props.dataCoats]);
 
     async function getDataShoes() {
-        console.log('making a request for shoes');
         await getShoes();
         const result=outputShoes;
         props.setDataShoes(result);
     }
     async function getDataShirts() {
-        console.log('making a request for shirts');
         await getShirts();
         const result=outputShirts;
         props.setDataShirts(result);
     }
     async function getDataCoats() {
-        console.log('making a request for coats');
         await getCoats();
         const result=outputCoats;
         props.setDataCoats(result);
     }
     async function getDataAccessories() {
-        console.log('making a request for acccessories');
         await getAccessories();
         const result=outputAccessories;
         props.setDataAccessories(result);
     }
     async function getDataBrands() {
-        console.log('making a request for just brands');
         await getJustBrands();
         const result=outputJustBrands;
         props.setBrands(result);
     }
     async function getDataAllBrands() {
-        console.log('making a request for all brands');
         await getAllBrands();
         const result=outputAllBrands;
         props.setDataBrands(result);
-        console.log('result of getallDataBrands in coats: ', result);
     }
 
 
@@ -84,7 +77,6 @@ function CoatsPage(props) {
 
         axios.post('https://inventori.up.railway.app/add_coat_model', o)
         .then(res=>  {
-            // console.log('prevBrandData2 before push: ', prevBrandData2[2].products.category3);
             o._id=res.data.message.insertedId;
             prevBrandData2.filter(x=>x._id===o.brand)[0].products.category3.push(o);
             props.setDataBrands(prevBrandData2);

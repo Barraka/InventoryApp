@@ -16,8 +16,7 @@ function ProductAdd(props) {
     },[]);
 
     useEffect(()=>{
-        console.log('brands: ', brands);
-        window.brands=brands;
+
     },[brands]);
 
     function getBase64(file) {
@@ -33,7 +32,7 @@ function ProductAdd(props) {
             fileRef.current.reportValidity();
             return;
         }
-        console.log('size: ', fileRef.current.files[0].size);
+
         //Encode file
         var reader = new FileReader();
         reader.readAsDataURL(file);
@@ -90,7 +89,6 @@ function ProductAdd(props) {
             if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
             //Default picture
             if(!tempdata.picture || tempdata.picture===placeholderImage)tempdata.picture=undefined;
-            console.log('about to send product: ', tempdata);
             if(props.forBrand)props.setBrands(undefined);
             props.sendData(tempdata);
         }        

@@ -25,37 +25,31 @@ function AccessoriesPage(props) {
     },[props.brands, props.dataAccessories]);
 
     async function getDataShoes() {
-        console.log('making a request for shoes');
         await getShoes();
         const result=outputShoes;
         props.setDataShoes(result);
     }
     async function getDataShirts() {
-        console.log('making a request for shirts');
         await getShirts();
         const result=outputShirts;
         props.setDataShirts(result);
     }
     async function getDataCoats() {
-        console.log('making a request for coats');
         await getCoats();
         const result=outputCoats;
         props.setDataCoats(result);
     }
     async function getDataAccessories() {
-        console.log('making a request for acccessories');
         await getAccessories();
         const result=outputAccessories;
         props.setDataAccessories(result);
     }
     async function getDataBrands() {
-        console.log('making a request for just brands');
         await getJustBrands();
         const result=outputJustBrands;
         props.setBrands(result);
     }
     async function getDataAllBrands() {
-        console.log('making a request for all brands');
         await getAllBrands();
         const result=outputAllBrands;
         props.setDataBrands(result);

@@ -9,7 +9,9 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { debuglog } = require('util');
 const corsOptions = {
     origin:'*', 
-    credentials:true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
+    credentials: true,
     optionsSuccessStatus:200
 }
 
