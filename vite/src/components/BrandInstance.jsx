@@ -3,7 +3,6 @@ import axios from 'axios';
 import EditProductHeader from './EditProductHeader';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import placeholderImage from '../assets/empty.jpg';
-import loading from '../assets/loading.gif';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
 
@@ -87,22 +86,22 @@ function BrandInstance(props) {
         }
         setDisplayCategory(<div className='brandWrapper'>
         {Object.keys(target.products?.category1).length ? <div className='category'><div className='categoryName'>Shoes</div><div className='brandProductList'>{target.products.category1.map((x,i)=> 
-             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/shoes/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/shoes/'+x._id)}><div className='brandProductWrapper'><img src={x.picture ? x.picture : placeholderImage} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
 
         {Object.keys(target.products.category2).length ? <div className='category'><div className='categoryName'>Shirts</div><div className='brandProductList'>{target.products.category2.map((x,i)=> 
-             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/shirts/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/shirts/'+x._id)}><div className='brandProductWrapper'><img src={x.picture ? x.picture : placeholderImage} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
 
         {Object.keys(target.products.category3).length ? <div className='category'><div className='categoryName'>Coats</div><div className='brandProductList'>{target.products.category3.map((x,i)=> 
-             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/coats/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/coats/'+x._id)}><div className='brandProductWrapper'><img src={x.picture ? x.picture : placeholderImage} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
         
         {Object.keys(target.products.category4).length ? <div className='category'><div className='categoryName'>Accessories</div><div className='brandProductList'>{target.products.category4.map((x,i)=> 
-             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/accessories/'+x._id)}><div className='brandProductWrapper'><img src={x.picture} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
+             (<div key={x._id ? x._id : i} className="brandProduct" onClick={e=>navigate('/accessories/'+x._id)}><div className='brandProductWrapper'><img src={x.picture ? x.picture : placeholderImage} alt="thumbnail" /></div><div className='brandProductName'>{x.model}</div></div>)
         )
         }</div></div>: null}
     </div>);
@@ -124,8 +123,9 @@ function BrandInstance(props) {
                 tempval1[i].picture=o.picture;
             }
         }
-        // props.setDataBrands(tempval2);
-        // props.setBrands(tempval1);
+        // console.log('temp');
+        props.setDataBrands(tempval1);
+        props.setBrands(tempval2);
         const targetPath = 'https://inventori.up.railway.app/brands/'+o._id;
         await axios.put(targetPath, o)
         .catch(e=> {
@@ -155,17 +155,20 @@ function BrandInstance(props) {
             </div>);
         } else {
             navigate('/brands');
-            const prev=data;
+
             props.setDataBrands(prev=>prev.filter(x=>x._id!==data._id));
             props.setBrands(prev=>prev.filter(x=>x._id!==data._id));
-            const targetPath = 'https://inventori.up.railway.app/brands/'+data._id;
-            await axios.delete(targetPath, modelInfo._id)
+            const targetPath = 'http://localhost:3000/brands/'+data._id;
+            // const targetPath = 'https://inventori.up.railway.app/brands/'+data._id;
+            await axios.delete(targetPath, data._id)
             .then(res=> {
+                console.log('res after delete: ',res.data.message);
                 getDataAllBrands();
+                
             })
             .catch(e=> {
                 console.error('Error deleting product: ', e);
-                props.setDataBrands(prev);
+                // props.setDataBrands(prev);
             });
             
         }
@@ -182,7 +185,7 @@ function BrandInstance(props) {
                 <div className="model">{data ? data.name : ''}</div>
                 <div className="brandName"></div>
                 <div className="instanceImageWrapper">
-                    <img src={data.picture ? data.picture : loading} alt="picture" />
+                    <img src={data.picture ? data.picture : placeholderImage} alt="picture" />
                 </div>
             </div>
             {displayCategory}

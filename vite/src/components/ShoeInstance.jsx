@@ -5,7 +5,7 @@ import ShoeInstanceSize from './ShoeInstanceSize';
 import EditProductHeader from './EditProductHeader';
 import AddSizeShoe from './AddSizeShoe';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import loading from '../assets/loading.gif';
+import placeholderImage from '../assets/empty.jpg';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
 function ShoeInstance(props) {
@@ -21,6 +21,8 @@ function ShoeInstance(props) {
         if(props.dataShoes===undefined)getDataShoes(); 
         else {
             const target=props.dataShoes.find(x=>x._id===productID);
+            const getBrandName=props.brands.find(x=>x._id===target.brand);
+            target.brandName=getBrandName.name;
             setModelInfo(target); 
         }
         if(props.brands===undefined)getDataBrands();
@@ -145,7 +147,7 @@ function ShoeInstance(props) {
                 <div className="model">{modelInfo.model}</div>
                 <div className="brandName">{modelInfo.brandName}</div>
                 <div className="instanceImageWrapper">
-                    <img src={modelInfo.picture===undefined ? loading : modelInfo.picture} alt="picture" />
+                    <img src={modelInfo.picture===undefined ? placeholderImage : modelInfo.picture} alt="picture" />
                 </div>
             </div>
             <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShoe setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>

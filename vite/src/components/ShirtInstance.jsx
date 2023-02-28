@@ -5,7 +5,7 @@ import EditProductHeader from './EditProductHeader';
 import ProductInstanceSize from './ProductInstanceSize';
 import AddSizeShirt from './AddSizeShirt';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import loading from '../assets/loading.gif';
+import placeholderImage from '../assets/empty.jpg';
 import {getAllBrands, getJustBrands, getShirts, getShoes, getCoats, getAccessories, outputAccessories, outputAllBrands, outputCoats, outputJustBrands, outputShirts, outputShoes} from '../crud';
 
 function ShirtInstance(props) {
@@ -41,6 +41,8 @@ function ShirtInstance(props) {
     useEffect(()=>{
         if(props.dataShirts) {
             const target=props.dataShirts.find(x=>x._id===productID);
+            const getBrandName=props.brands.find(x=>x._id===target.brand);
+            target.brandName=getBrandName.name;
             setModelInfo(target);
         } 
     },[props.dataShirts]);
@@ -153,7 +155,7 @@ function ShirtInstance(props) {
             <div className="model">{modelInfo.model}</div>
             <div className="brandName">{modelInfo.brandName}</div>
             <div className="instanceImageWrapper">
-                <img src={modelInfo.picture===undefined ? loading : modelInfo.picture} alt="picture" />
+                <img src={modelInfo.picture===undefined ? placeholderImage : modelInfo.picture} alt="picture" />
             </div>
         </div>
         <button className='addSizeButton' onClick={()=>setAddSize(<AddSizeShirt setAddSize={setAddSize} modelInfo={modelInfo} updateInfo={updateInfo}/>)}>{addIcon} <span>Add new size</span></button>

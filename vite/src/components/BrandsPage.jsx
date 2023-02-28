@@ -22,6 +22,7 @@ function BrandsPage(props) {
     },[]);
 
     useEffect(()=>{
+        console.log('props.databrands: ', props.dataBrands);
     },[props.brands, props.dataBrands, addModel]);
 
     async function getDataShoes() {
@@ -76,7 +77,7 @@ function BrandsPage(props) {
         .then(res=>{
             const result=res.data.message;
             props.setBrands(result);
-            props.getBrands();
+            getDataBrands();
         })     
         .catch(e=>{
             console.error('error: ', e);
@@ -95,11 +96,12 @@ function BrandsPage(props) {
             {productInstance}
             <div className="modelsWrapper">
                 <div className="intro">
-                    <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} forBrand={true} sendData={sendData}  refresh={refresh} brands={props.brands} />)}> {addIcon}<span>Add Brand</span> </button> 
+                    <button className='addSizeButton' onClick={()=>setAddModel(<ProductAdd  setAddModel={setAddModel} forBrand={true} sendData={sendData}  refresh={refresh} brands={props.brands} setBrands={props.setBrands} />)}> {addIcon}<span>Add Brand</span> </button> 
                 </div>
 
                 <div className="models">
-                    
+                    {/* {props.dataBrands  ? props.dataBrands.map((x,i)=><div forBrand={true} key={x._id || i} id={x._id} count={x.products.category1?.length+x.products.category2?.length+x.products.category3?.length+x.products.category4?.length} brands={props.brands} data={x} target={'/brands/'}>This is a card</div>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>} */}
+
                     {props.dataBrands  ? props.dataBrands.map((x,i)=><ProductCard forBrand={true} key={x._id || i} id={x._id} count={x.products.category1?.length+x.products.category2?.length+x.products.category3?.length+x.products.category4?.length} brands={props.brands} data={x} target={'/brands/'}/>): <div className='loadingWrapper'><img src={loading} alt="loading" /></div>}
 
                 </div>            

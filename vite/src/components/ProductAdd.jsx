@@ -89,8 +89,9 @@ function ProductAdd(props) {
             }
             if(!props.forBrand)tempdata.price=parseFloat(tempdata.price);
             //Default picture
-            // if(!tempdata.picture || tempdata.picture===placeholderImage)tempdata.picture=getBase64(placeholderImage);
+            if(!tempdata.picture || tempdata.picture===placeholderImage)tempdata.picture=undefined;
             console.log('about to send product: ', tempdata);
+            if(props.forBrand)props.setBrands(undefined);
             props.sendData(tempdata);
         }        
     }

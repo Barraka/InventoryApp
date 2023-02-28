@@ -74,7 +74,11 @@ function CoatsPage(props) {
         props.setDataCoats([...prevData, o]);
         const prevBrandData=[...props.dataBrands];
         const prevBrandData2 = JSON.parse(JSON.stringify(prevBrandData));
-        prevBrandData.filter(x=>x._id===o.brand)[0].products.category3.push(o);
+        try {
+            prevBrandData.filter(x=>x._id===o.brand)[0].products?.category3.push(o);
+        } catch {
+            console.error('No brand id found');
+        }
         props.setDataBrands(prevBrandData);
 
         axios.post('https://inventori.up.railway.app/add_coat_model', o)
